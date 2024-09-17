@@ -28,7 +28,12 @@ public class PetServiceImpl implements IPetService {
     public Response add(Pet p) {
         p.setId(UUID.randomUUID().toString());
         petMapper.add(p);
-        return null;
+        Pet petInfo = petMapper.getById(p.getId());
+        if (petInfo != null) {
+            return Response.success(petInfo);
+        } else {
+            return Response.error("500", "添加宠物信息失败");
+        }
     }
 
     @Override

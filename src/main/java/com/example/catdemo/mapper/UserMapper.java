@@ -26,7 +26,7 @@ public interface UserMapper {
     @Update("UPDATE user SET status = #{user.status} WHERE username = #{user.username}")
     void updateUser(@Param("user") User user);
 
-    void deleteUser(String username);
+    //void deleteUser(String username);
 
     @Select("Select count(*) from User where username = #{username}" )
     int getCountbyUser(String username);

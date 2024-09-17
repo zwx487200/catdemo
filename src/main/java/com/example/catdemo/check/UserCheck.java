@@ -55,6 +55,29 @@ public class UserCheck {
         }
         return null;
     }
+
+    public Response checkRegisterUssr(User user) {
+        if (null == user){
+            return Response.error("300", "用户信息为空");
+        } else {
+            if (StringUtils.isEmpty(user.getUsername())) {
+                return Response.error("300", "用户名不能为空");
+            }
+            if (StringUtils.isEmpty(user.getPassword())) {
+                return Response.error("300", "密码不能为空");
+            }
+            String regex = "^[^；:<>]{1,19}$";
+            if (!user.getUsername().matches(regex)) {
+                return Response.error("300", "用户名不合法");
+            }
+            if (!user.getPassword().matches(regex)) {
+                return Response.error("300", "密码不合法");
+            }
+        }
+        return null;
+    }
+
+
     public Response checkResetUser(ResetUser user) {
         Response response = null;
         if (null == user){

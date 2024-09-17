@@ -10,14 +10,12 @@ import com.example.catdemo.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
 @Repository
+@CrossOrigin
 public class UserController {
 
     @Autowired
@@ -35,7 +33,7 @@ public class UserController {
     @PostMapping("/register")
     public Response register(@RequestBody  User user) {
         Response response = userCheck.checkUssr(user);
-        if (null == response){
+        if (null != response){
             return response;
         }
         //password加密
@@ -74,6 +72,8 @@ public class UserController {
        // TODO 电话号码一键登入
        return userService.login(user);
     }
+
+    
 
     @PostMapping("/logOut")
     public Response logOut(@RequestBody User user) {

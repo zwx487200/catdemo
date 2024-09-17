@@ -31,9 +31,6 @@ public class User implements Serializable {
     String status;
     Date createTime;
     String updateTime;
-
-
-
     String captcha;
 
 }

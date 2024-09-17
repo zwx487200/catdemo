@@ -1,15 +1,21 @@
 package com.example.catdemo.service.impl;
 
+import com.example.catdemo.entity.LogInUser;
 import com.example.catdemo.entity.User;
 import com.example.catdemo.mapper.UserMapper;
 import com.example.catdemo.service.IUserService;
 import com.example.catdemo.utils.PasswordUtils;
 import com.example.catdemo.utils.Response;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author jennyzhuzhu
@@ -19,6 +25,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    RedisTemplate redisTemplate;
     /**
      * @param userId
      * @return
@@ -135,14 +144,28 @@ public class UserServiceImpl implements IUserService {
         if ("LOCK".equals(userinfo.getStatus())) {
             return Response.error("500","您的账号已被锁定，请联系管理员");
         }
-        if ("LOGIN".equals(userinfo.getStatus())) {
-            return Response.error("500","您的账号已登入，请勿重复登入");
-        }
+        // 关闭不可重复登入
+//        if ("LOGIN".equals(userinfo.getStatus())) {
+//            return Response.error("500","您的账号已登入，请勿重复登入");
+//        }
         // TODO 登录成功后返回token
         // TODO 请自行实现token生成和返回
 
         userinfo.setStatus("LOGIN");
         userMapper.updateUser(userinfo);
-        return Response.success(userinfo);
+        String token = Jwts.builder().setSubject(userinfo.getUsername())
+                .setIssuedAt(new java.util.Date())
+                .setExpiration(new java.util.Date(System.currentTimeMillis() + 60000))
+                .setId("userId")
+                //.setClaims(hashMap)
+                .signWith(SignatureAlgorithm.HS256, "FREEMAN")
+                .compact();
+        redisTemplate.opsForValue().set(userinfo.getUsername(),token);
+        //设置过期时间1天过期
+        redisTemplate.expire("name",1, TimeUnit.MINUTES);
+        LogInUser loginuser = new LogInUser();
+        BeanUtils.copyProperties(userinfo,loginuser);
+        loginuser.setToken(token);
+        return Response.success(loginuser);
     }
 }

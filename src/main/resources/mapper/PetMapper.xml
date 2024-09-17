@@ -95,4 +95,52 @@
         </if>
         </trim>
     </insert>
+    <update id="update" parameterType="com.example.catdemo.entity.Pet">
+        update  petinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="breed != null">
+                breed = #{breed},
+            </if>
+            <if test="age != null">
+                age = #{age},
+            </if>
+            <if test="gender != null">
+                age = #{age},
+            </if>
+            <if test="weight != null">
+                age = #{age},
+            </if>
+            <if test="vaccinated != null">
+                age = #{age},
+            </if>
+            <if test="neutered != null">
+                age = #{age},
+            </if>
+            <if test="neuteredTime != null">
+                age = #{age},
+            </if>
+            <if test="ownerId != null">
+                age = #{age},
+            </if>
+            <if test="registrationDate != null">
+                age = #{age},
+            </if>
+        </trim>
+        where  id = #{id}
+    </update>
+    <delete id="delete" parameterType="java.lang.String">
+        delete from petinfo where id = #{id}
+    </delete>
+    <select id="getById" resultType="com.example.catdemo.entity.Pet" parameterType="java.lang.String">
+        Select * from petinfo where id = #{id}
+    </select>
+    <select id="getAllByOwnId" resultType="com.example.catdemo.entity.Pet" parameterType="java.lang.String">
+        Select * from petinfo where ownerId = #{ownerId}
+    </select>
+    <select id="listAll" resultType="com.example.catdemo.entity.Pet">
+        Select * from petinfo
+    </select>
 </mapper>
