@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.catdemo.mapper.PetinfoMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.catdemo.entity.Petinfo">
+    <id column="Id" jdbcType="VARCHAR" property="id"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="breed" jdbcType="VARCHAR" property="breed"/>
+    <result column="age" jdbcType="INTEGER" property="age"/>
+    <result column="gender" jdbcType="CHAR" property="gender"/>
+    <result column="weight" jdbcType="DECIMAL" property="weight"/>
+    <result column="vaccinated" jdbcType="TINYINT" property="vaccinated"/>
+    <result column="neutered" jdbcType="TINYINT" property="neutered"/>
+    <result column="neuteredTime" jdbcType="TIMESTAMP" property="neuteredtime"/>
+    <result column="ownerId" jdbcType="VARCHAR" property="ownerid"/>
+    <result column="registration_date" jdbcType="TIMESTAMP" property="registrationDate"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    Id, name, breed, age, gender, weight, vaccinated, 
+	neutered, neuteredTime, ownerId, registration_date
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from petinfo
+    where Id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from petinfo
+    where Id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.example.catdemo.entity.Petinfo">
+    insert into petinfo(name, breed, age,
+	 gender, weight, vaccinated, neutered, 
+	 neuteredTime, ownerId, registration_date)
+    values (#{name,jdbcType=VARCHAR}, #{breed,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
+	 #{gender,jdbcType=CHAR}, #{weight,jdbcType=DECIMAL}, #{vaccinated,jdbcType=TINYINT}, #{neutered,jdbcType=TINYINT}, 
+	 #{neuteredtime,jdbcType=TIMESTAMP}, #{ownerid,jdbcType=VARCHAR}, #{registrationDate,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.example.catdemo.entity.Petinfo">
+    insert into petinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="breed != null">
+        breed,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="vaccinated != null">
+        vaccinated,
+      </if>
+      <if test="neutered != null">
+        neutered,
+      </if>
+      <if test="neuteredtime != null">
+        neuteredTime,
+      </if>
+      <if test="ownerid != null">
+        ownerId,
+      </if>
+      <if test="registrationDate != null">
+        registration_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="breed != null">
+        #{breed,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=CHAR},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="vaccinated != null">
+        #{vaccinated,jdbcType=TINYINT},
+      </if>
+      <if test="neutered != null">
+        #{neutered,jdbcType=TINYINT},
+      </if>
+      <if test="neuteredtime != null">
+        #{neuteredtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ownerid != null">
+        #{ownerid,jdbcType=VARCHAR},
+      </if>
+      <if test="registrationDate != null">
+        #{registrationDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.catdemo.entity.Petinfo">
+    update petinfo
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="breed != null">
+        breed = #{breed,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=CHAR},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="vaccinated != null">
+        vaccinated = #{vaccinated,jdbcType=TINYINT},
+      </if>
+      <if test="neutered != null">
+        neutered = #{neutered,jdbcType=TINYINT},
+      </if>
+      <if test="neuteredtime != null">
+        neuteredTime = #{neuteredtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ownerid != null">
+        ownerId = #{ownerid,jdbcType=VARCHAR},
+      </if>
+      <if test="registrationDate != null">
+        registration_date = #{registrationDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.Petinfo">
+    update petinfo
+    set name = #{name,jdbcType=VARCHAR},
+	  breed = #{breed,jdbcType=VARCHAR},
+	  age = #{age,jdbcType=INTEGER},
+	  gender = #{gender,jdbcType=CHAR},
+	  weight = #{weight,jdbcType=DECIMAL},
+	  vaccinated = #{vaccinated,jdbcType=TINYINT},
+	  neutered = #{neutered,jdbcType=TINYINT},
+	  neuteredTime = #{neuteredtime,jdbcType=TIMESTAMP},
+	  ownerId = #{ownerid,jdbcType=VARCHAR},
+	  registration_date = #{registrationDate,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

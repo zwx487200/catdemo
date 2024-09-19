@@ -44,7 +44,12 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public Response updateUserDetails(User user) {
-        return null;
+        userMapper.updateUserInfo(user);
+        User newUser = userMapper.getUserDetails(user.getUserId());
+        if (null != newUser) {
+            return Response.success(newUser);
+        }
+        return Response.error("500","更新用户信息失败");
     }
 
     /**
@@ -118,7 +123,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public Response logOut(User user) {
         user.setStatus("LOGOUT");
-        userMapper.updateUser(user);
+        userMapper.updateUserInfo(user);
         User userInfo = userMapper.getUserDetails(user.getUserId());
         if (null!= userInfo && "LOGOUT".equals(userInfo.getStatus())) {
             return Response.noDateSuccess();
@@ -148,11 +153,9 @@ public class UserServiceImpl implements IUserService {
 //        if ("LOGIN".equals(userinfo.getStatus())) {
 //            return Response.error("500","您的账号已登入，请勿重复登入");
 //        }
-        // TODO 登录成功后返回token
-        // TODO 请自行实现token生成和返回
 
         userinfo.setStatus("LOGIN");
-        userMapper.updateUser(userinfo);
+        userMapper.updateUserInfo(userinfo);
         String token = Jwts.builder().setSubject(userinfo.getUsername())
                 .setIssuedAt(new java.util.Date())
                 .setExpiration(new java.util.Date(System.currentTimeMillis() + 60000))

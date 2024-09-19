@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.catdemo.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.catdemo.entity.User">
+        <id column="userId" property="userId" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="email" property="email" />
+        <result column="phone" property="phone" />
+        <result column="role" property="role" />
+        <result column="lastLoginTime" property="lastLoginTime" />
+        <result column="lastLoginIp" property="lastLoginIp" />
+        <result column="status" property="status" />
+        <result column="createTime" property="createTime" />
+        <result column="updateTime" property="updateTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                userId, username, password, email, phone, role, lastLoginTime,
+                lastLoginIp, status, createTime, updateTime
+    </sql>
+
+    <select id="getUserDetails" parameterType="com.example.catdemo.entity.User" resultMap="BaseResultMap">
+        select userId, username, email, phone,role from user where userId = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <update id="updateUserInfo" parameterType="com.example.catdemo.entity.User">
+        update user
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="username != null">
+                    username = #{username},
+                </if>
+                <if test="email != null">
+                    email = #{email},
+                </if>
+                <if test="phone != null">
+                    phone = #{phone},
+                </if>
+                <if test="role != null">
+                    role = #{role},
+                </if>
+                <if test="lastLoginTime != null">
+                    lastLoginTime = #{lastLoginTime},
+                </if>
+                <if test="lastLoginIp != null">
+                    lastLoginIp = #{lastLoginIp},
+                </if>
+                <if test="status != null">
+                    status = #{status},
+                </if>
+                <if test="updateTime != null">
+                    updateTime = #{updateTime},
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="username != null">
+                    #{username,jdbcType=VARCHAR},
+                </if>
+                <if test="email != null">
+                    #{email,jdbcType=VARCHAR},
+                </if>
+                <if test="phone != null">
+                    #{phone,jdbcType=VARCHAR},
+                </if>
+                <if test="role != null">
+                    #{role,jdbcType=VARCHAR},
+                </if>
+                <if test="lastLoginTime != null">
+                    #{lastLoginTime,jdbcType=VARCHAR},
+                </if>
+                <if test="lastLoginIp != null">
+                    #{lastLoginIp,jdbcType=VARCHAR},
+                </if>
+                <if test="status != null">
+                    #{status,jdbcType=VARCHAR},
+                </if>
+                <if test="updateTime != null">
+                    #{updateTime,jdbcType=VARCHAR},
+                </if>
+            </trim>
+        where userId = #{userId,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

@@ -23,8 +23,7 @@ public interface UserMapper {
     @Delete("DELETE FROM user WHERE username = #{username}")
     void deleteUserByUsername(String username);
 
-    @Update("UPDATE user SET status = #{user.status} WHERE username = #{user.username}")
-    void updateUser(@Param("user") User user);
+    void updateUserInfo(@Param("user") User user);
 
     //void deleteUser(String username);
 
@@ -34,6 +33,5 @@ public interface UserMapper {
     @Select("Select * from User where username = #{username}" )
     User getUserDetailsByUsername(String username);
 
-    @Select("SELECT * FROM user WHERE userId = #{userId}")
     User getUserDetails(String userId);
 }

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.catdemo.mapper.UserloginhistoryMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.catdemo.entity.Userloginhistory">
+    <id column="userLoginHistory" jdbcType="VARCHAR" property="userloginhistory"/>
+    <result column="userId" jdbcType="VARCHAR" property="userid"/>
+    <result column="loginInTime" jdbcType="TIMESTAMP" property="loginintime"/>
+    <result column="loginOutTime" jdbcType="TIMESTAMP" property="loginouttime"/>
+    <result column="loginIp" jdbcType="VARCHAR" property="loginip"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    userLoginHistory, userId, loginInTime, loginOutTime, loginIp
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from userloginhistory
+    where userLoginHistory = #{userloginhistory,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from userloginhistory
+    where userLoginHistory = #{userloginhistory,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.example.catdemo.entity.Userloginhistory">
+    <selectKey keyProperty="userloginhistory" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into userloginhistory(userId, loginInTime, loginOutTime, 
+	 loginIp)
+    values (#{userid,jdbcType=VARCHAR}, #{loginintime,jdbcType=TIMESTAMP}, #{loginouttime,jdbcType=TIMESTAMP}, 
+	 #{loginip,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.example.catdemo.entity.Userloginhistory">
+    <selectKey keyProperty="userloginhistory" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into userloginhistory
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="loginintime != null">
+        loginInTime,
+      </if>
+      <if test="loginouttime != null">
+        loginOutTime,
+      </if>
+      <if test="loginip != null">
+        loginIp,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="loginintime != null">
+        #{loginintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginouttime != null">
+        #{loginouttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginip != null">
+        #{loginip,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.catdemo.entity.Userloginhistory">
+    update userloginhistory
+    <set>
+      <if test="userid != null">
+        userId = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="loginintime != null">
+        loginInTime = #{loginintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginouttime != null">
+        loginOutTime = #{loginouttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginip != null">
+        loginIp = #{loginip,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where userLoginHistory = #{userloginhistory,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.Userloginhistory">
+    update userloginhistory
+    set userId = #{userid,jdbcType=VARCHAR},
+	  loginInTime = #{loginintime,jdbcType=TIMESTAMP},
+	  loginOutTime = #{loginouttime,jdbcType=TIMESTAMP},
+	  loginIp = #{loginip,jdbcType=VARCHAR}
+    where userLoginHistory = #{userloginhistory,jdbcType=VARCHAR}
+  </update>
+</mapper>

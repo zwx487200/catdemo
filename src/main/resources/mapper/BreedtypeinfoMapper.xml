@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.catdemo.mapper.BreedtypeinfoMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.catdemo.entity.Breedtypeinfo">
+    <id column="Id" jdbcType="VARCHAR" property="id"/>
+    <result column="breedType" jdbcType="VARCHAR" property="breedtype"/>
+    <result column="secondBreedType" jdbcType="VARCHAR" property="secondbreedtype"/>
+    <result column="fatherBreedId" jdbcType="VARCHAR" property="fatherbreedid"/>
+    <result column="breedTypeCNName" jdbcType="VARCHAR" property="breedtypecnname"/>
+    <result column="breedTypeENName" jdbcType="VARCHAR" property="breedtypeenname"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    Id, breedType, secondBreedType, fatherBreedId, breedTypeCNName, breedTypeENName
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from breedtypeinfo
+    where Id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from breedtypeinfo
+    where Id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.example.catdemo.entity.Breedtypeinfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into breedtypeinfo(breedType, secondBreedType, fatherBreedId, 
+	 breedTypeCNName, breedTypeENName)
+    values (#{breedtype,jdbcType=VARCHAR}, #{secondbreedtype,jdbcType=VARCHAR}, #{fatherbreedid,jdbcType=VARCHAR}, 
+	 #{breedtypecnname,jdbcType=VARCHAR}, #{breedtypeenname,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.example.catdemo.entity.Breedtypeinfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into breedtypeinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="breedtype != null">
+        breedType,
+      </if>
+      <if test="secondbreedtype != null">
+        secondBreedType,
+      </if>
+      <if test="fatherbreedid != null">
+        fatherBreedId,
+      </if>
+      <if test="breedtypecnname != null">
+        breedTypeCNName,
+      </if>
+      <if test="breedtypeenname != null">
+        breedTypeENName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="breedtype != null">
+        #{breedtype,jdbcType=VARCHAR},
+      </if>
+      <if test="secondbreedtype != null">
+        #{secondbreedtype,jdbcType=VARCHAR},
+      </if>
+      <if test="fatherbreedid != null">
+        #{fatherbreedid,jdbcType=VARCHAR},
+      </if>
+      <if test="breedtypecnname != null">
+        #{breedtypecnname,jdbcType=VARCHAR},
+      </if>
+      <if test="breedtypeenname != null">
+        #{breedtypeenname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.catdemo.entity.Breedtypeinfo">
+    update breedtypeinfo
+    <set>
+      <if test="breedtype != null">
+        breedType = #{breedtype,jdbcType=VARCHAR},
+      </if>
+      <if test="secondbreedtype != null">
+        secondBreedType = #{secondbreedtype,jdbcType=VARCHAR},
+      </if>
+      <if test="fatherbreedid != null">
+        fatherBreedId = #{fatherbreedid,jdbcType=VARCHAR},
+      </if>
+      <if test="breedtypecnname != null">
+        breedTypeCNName = #{breedtypecnname,jdbcType=VARCHAR},
+      </if>
+      <if test="breedtypeenname != null">
+        breedTypeENName = #{breedtypeenname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.Breedtypeinfo">
+    update breedtypeinfo
+    set breedType = #{breedtype,jdbcType=VARCHAR},
+	  secondBreedType = #{secondbreedtype,jdbcType=VARCHAR},
+	  fatherBreedId = #{fatherbreedid,jdbcType=VARCHAR},
+	  breedTypeCNName = #{breedtypecnname,jdbcType=VARCHAR},
+	  breedTypeENName = #{breedtypeenname,jdbcType=VARCHAR}
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -36,9 +36,7 @@ public class UserController {
         if (null != response){
             return response;
         }
-        //password加密
         user.setPassword(PasswordUtils.hashPassword(user.getPassword()));
-        //redis 存储
         return userService.createUser(user);
     }
 
@@ -73,10 +71,15 @@ public class UserController {
        return userService.login(user);
     }
 
-    
-
     @PostMapping("/logOut")
     public Response logOut(@RequestBody User user) {
         return userService.logOut(user);
     }
+
+    //updateUserInfo
+    @PostMapping("/updateUserInfo")
+    public Response updateUserInfo(@RequestBody User user) {
+        return userService.updateUserDetails(user);
+    }
+
 }
