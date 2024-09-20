@@ -23,7 +23,7 @@ public interface UserMapper {
     @Delete("DELETE FROM user WHERE username = #{username}")
     void deleteUserByUsername(String username);
 
-    void updateUserInfo(@Param("user") User user);
+    void updateUserInfo(User user);
 
     //void deleteUser(String username);
 

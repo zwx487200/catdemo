@@ -54,32 +54,6 @@
                     updateTime = #{updateTime},
                 </if>
             </trim>
-            <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="username != null">
-                    #{username,jdbcType=VARCHAR},
-                </if>
-                <if test="email != null">
-                    #{email,jdbcType=VARCHAR},
-                </if>
-                <if test="phone != null">
-                    #{phone,jdbcType=VARCHAR},
-                </if>
-                <if test="role != null">
-                    #{role,jdbcType=VARCHAR},
-                </if>
-                <if test="lastLoginTime != null">
-                    #{lastLoginTime,jdbcType=VARCHAR},
-                </if>
-                <if test="lastLoginIp != null">
-                    #{lastLoginIp,jdbcType=VARCHAR},
-                </if>
-                <if test="status != null">
-                    #{status,jdbcType=VARCHAR},
-                </if>
-                <if test="updateTime != null">
-                    #{updateTime,jdbcType=VARCHAR},
-                </if>
-            </trim>
         where userId = #{userId,jdbcType=VARCHAR}
     </update>
 

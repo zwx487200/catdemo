@@ -32,9 +32,6 @@
   </delete>
 
   <insert id="insert" parameterType="com.example.catdemo.entity.Userchangehistory">
-    <selectKey keyProperty="userchangehistoryid" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into userchangehistory(userId, username, password, 
 	 email, phone, role, status, 
 	 createTime, updateTime)
@@ -44,9 +41,6 @@
   </insert>
 
   <insert id="insertSelective" parameterType="com.example.catdemo.entity.Userchangehistory">
-    <selectKey keyProperty="userchangehistoryid" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into userchangehistory
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userid != null">
