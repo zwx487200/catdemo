@@ -23,7 +23,7 @@
     </sql>
 
     <select id="getUserDetails" parameterType="com.example.catdemo.entity.User" resultMap="BaseResultMap">
-        select userId, username, email, phone,role from user where userId = #{userId,jdbcType=VARCHAR}
+        select userId, username, email, phone, role from user where userId = #{userId,jdbcType=VARCHAR}
     </select>
 
     <update id="updateUserInfo" parameterType="com.example.catdemo.entity.User">
