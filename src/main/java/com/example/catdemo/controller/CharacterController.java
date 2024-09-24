@@ -4,7 +4,6 @@ import com.example.catdemo.entity.Character;
 import com.example.catdemo.service.ICharacterService;
 import com.example.catdemo.utils.RequestInfo;
 import com.example.catdemo.utils.Response;
-import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,9 +24,8 @@ public class CharacterController {
     ICharacterService iCharacterService;
 
     @PostMapping("/queryCharacterList")
-    public Response queryCharacterList(@RequestBody RequestInfo requestInfo) {
+    public Response queryCharacterList(@RequestBody Character character) {
 //        PageHelper.startPage(requestInfo.getPageNum(), requestInfo.getPageSize());
-        Character character = (Character) requestInfo.getData();
         return iCharacterService.queryCharacterList(character);
     }
 

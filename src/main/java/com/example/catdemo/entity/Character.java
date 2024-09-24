@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @Data
 @ApiModel("")
-public class Character implements Serializable  {
+public class Character extends PageInfo implements Serializable  {
 
     private static final long serialVersionUID = 1L;
 

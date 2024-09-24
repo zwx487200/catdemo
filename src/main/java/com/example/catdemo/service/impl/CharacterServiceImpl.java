@@ -5,6 +5,7 @@ import com.example.catdemo.mapper.CharacterMapper;
 import com.example.catdemo.service.ICharacterService;
 import com.example.catdemo.utils.Response;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +30,10 @@ public class CharacterServiceImpl implements ICharacterService {
 
     @Override
     public Response queryCharacterList(Character character) {
-        PageHelper.startPage(1, 5);
+        PageHelper.startPage(character.getPageNum(), character.getPageSize());
         List<Character> characterList = characterMapper.selectByCharacter(character);
-        return Response.success(characterList);
+        PageInfo<Character> pageInfo = new PageInfo<>(characterList);
+        return Response.success(characterList,pageInfo.getTotal());
     }
 
     @Override

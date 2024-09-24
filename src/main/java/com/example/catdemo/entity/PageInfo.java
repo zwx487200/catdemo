@@ -16,9 +16,9 @@ public class PageInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public int pageSize;
+    public int pageSize = 10;
 
-    public int pageNum;
+    public int pageNum = 1;
 
 
 }

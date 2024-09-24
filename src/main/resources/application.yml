@@ -35,3 +35,11 @@ mybatis:
   configuration:
     log-impl:
       org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+# PageHelper 分页插件配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countsql
