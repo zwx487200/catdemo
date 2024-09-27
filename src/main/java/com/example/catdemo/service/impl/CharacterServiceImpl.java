@@ -6,10 +6,12 @@ import com.example.catdemo.service.ICharacterService;
 import com.example.catdemo.utils.Response;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  *  服务实现类
@@ -25,6 +27,10 @@ public class CharacterServiceImpl implements ICharacterService {
 
     @Override
     public Response queryCharacter(Character character) {
+        List<Character> characterList = characterMapper.selectByCharacter(character);
+        if(characterList.size() > 1){
+            return Response.error("9999", "查询结果有多个");
+        }
         return queryCharacterList(character);
     }
 
@@ -38,7 +44,26 @@ public class CharacterServiceImpl implements ICharacterService {
 
     @Override
     public Response saveCharacter(Character character) {
-        return null;
+        // 查询是否已经存在
+        if(StringUtils.isNotBlank(character.getCharacterId())){
+            Character existCharacter = characterMapper.selectById(character.getCharacterId());
+            if(existCharacter!= null){
+                return Response.error("9999", "该数据已存在");
+            }else {
+                //character.setCharacterId(UUID.randomUUID().toString());
+                int count = characterMapper.insertSelective(character);
+                if(count == 0){
+                    return Response.error("9999", "插入数据失败");
+                }
+            }
+        } else {
+            character.setCharacterId(UUID.randomUUID().toString());
+            int count = characterMapper.insertSelective(character);
+            if(count == 0){
+                return Response.error("9999", "插入数据失败");
+            }
+        }
+        return Response.success(character);
     }
 
     @Override

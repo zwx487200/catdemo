@@ -196,6 +196,12 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.9.2</version>
 		</dependency>
+		<!-- 华为云obs-->
+		<dependency>
+			<groupId>com.huaweicloud</groupId>
+			<artifactId>esdk-obs-java-bundle</artifactId>
+			<version>3.23.9</version>
+		</dependency>
 	</dependencies>
 
 	<build>
