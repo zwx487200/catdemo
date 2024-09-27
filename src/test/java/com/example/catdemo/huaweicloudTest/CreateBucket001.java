@@ -37,7 +37,7 @@ public class CreateBucket001 {
         try {
             CreateBucketRequest request = new CreateBucketRequest();
             //示例桶名
-            String exampleBucket = "examplebucket";
+            String exampleBucket = "niyeshijojo";
             //示例桶区域位置
             String exampleLocation = "ap-southeast-1";
             request.setBucketName(exampleBucket);
