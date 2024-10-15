@@ -1,0 +1,95 @@
+### 环境变量
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+### 查询基础科目
+GET {{baseUrl}}/subject/get-base-subjects
+Content-Type: {{contentType}}
+
+### 添加科目
+POST {{baseUrl}}/subject/add
+Content-Type: {{contentType}}
+
+{
+    "name": "数学1",
+    "isCustom": 0,
+    "familyId": null
+}
+
+### 根据ID查询科目
+GET {{baseUrl}}/subject/get/1
+Content-Type: {{contentType}}
+
+### 根据家庭ID查询科目
+GET {{baseUrl}}/subject/get-by-family/3b978e15-c498-4999-911d-029c57ffbd89
+Content-Type: {{contentType}}
+
+### 分页查询科目
+POST {{baseUrl}}/subject/list
+Content-Type: {{contentType}}
+
+{
+    "pageNum": 1,
+    "pageSize": 10,
+    "data": {
+        "name": "数学",
+        "isCustom": 0
+    }
+}
+
+### 更新科目
+PUT {{baseUrl}}/subject/update
+Content-Type: {{contentType}}
+
+{
+    "id": 1,
+    "name": "高等数学",
+    "isCustom": 0,
+    "familyId": "family123"
+}
+
+### 删除科目
+DELETE {{baseUrl}}/subject/delete/1
+Content-Type: {{contentType}}
+
+### 批量添加科目
+POST {{baseUrl}}/subject/batch-add
+Content-Type: {{contentType}}
+
+[
+    {
+        "name": "语文",
+        "isCustom": 0,
+        "familyId": null
+    },
+    {
+        "name": "英语",
+        "isCustom": 0,
+        "familyId": null
+    }
+]
+
+### 批量删除科目
+DELETE {{baseUrl}}/subject/batch-delete
+Content-Type: {{contentType}}
+
+[1, 2, 3]
+
+### 批量更新科目
+PUT {{baseUrl}}/subject/batch-update
+Content-Type: {{contentType}}
+
+[
+    {
+        "id": 1,
+        "name": "语文",
+        "isCustom": 0,
+        "familyId": "family123"
+    },
+    {
+        "id": 2,
+        "name": "英语",
+        "isCustom": 0,
+        "familyId": "family123"
+    }
+] 

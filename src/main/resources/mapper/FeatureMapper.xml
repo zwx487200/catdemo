@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.catdemo.mapper.FeatureMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.catdemo.entity.Feature">
+    <id column="feature_id" jdbcType="VARCHAR" property="featureId"/>
+    <result column="feature_title_zh" jdbcType="VARCHAR" property="featureTitleZh"/>
+    <result column="feature_title_en" jdbcType="VARCHAR" property="featureTitleEn"/>
+    <result column="feature_url" jdbcType="VARCHAR" property="featureUrl"/>
+    <result column="requires_subscription" jdbcType="TINYINT" property="requiresSubscription"/>
+    <result column="type" jdbcType="VARCHAR" property="type"/>
+    <result column="sort" jdbcType="INTEGER" property="sort"/>
+    <result column="is_available_for_family" jdbcType="TINYINT" property="isAvailableForFamily"/>
+    <result column="allowed_family_roles" jdbcType="VARCHAR" property="allowedFamilyRoles"/>
+    <result column="seven_days_subscription_price" jdbcType="DECIMAL" property="sevenDaysSubscriptionPrice"/>
+    <result column="one_month_subscription_price" jdbcType="DECIMAL" property="oneMonthSubscriptionPrice"/>
+    <result column="one_quarter_subscription_price" jdbcType="DECIMAL" property="oneQuarterSubscriptionPrice"/>
+    <result column="one_year_subscription_price" jdbcType="DECIMAL" property="oneYearSubscriptionPrice"/>
+    <result column="has_discount" jdbcType="TINYINT" property="hasDiscount"/>
+    <result column="discount_rate" jdbcType="DECIMAL" property="discountRate"/>
+    <result column="is_trial_available" jdbcType="TINYINT" property="isTrialAvailable"/>
+    <result column="trial_duration" jdbcType="INTEGER" property="trialDuration"/>
+    <result column="trial_duration_unit" jdbcType="VARCHAR" property="trialDurationUnit"/>
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+    <result column="icons" jdbcType="VARCHAR" property="icons"/>
+    <result column="status" jdbcType="VARCHAR" property="status"/>
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.catdemo.entity.Feature">
+    <result column="feature_description_zh" jdbcType="LONGVARCHAR" property="featureDescriptionZh"/>
+    <result column="feature_description_en" jdbcType="LONGVARCHAR" property="featureDescriptionEn"/>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    feature_id, feature_title_zh, feature_title_en, feature_url, requires_subscription, type, sort, is_available_for_family, allowed_family_roles,
+	seven_days_subscription_price, one_month_subscription_price, one_quarter_subscription_price, one_year_subscription_price, has_discount, discount_rate, is_trial_available, 
+	trial_duration, trial_duration_unit, created_at, updated_at, icons, status
+  </sql>
+  <sql id="Blob_Column_List">
+    feature_description_zh, feature_description_en
+  </sql>
+
+  <select id="selectByExampleWithBLOBs" parameterType="com.example.catdemo.entity.FeatureExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from feature
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByExample" parameterType="com.example.catdemo.entity.FeatureExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from feature
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from feature
+    where feature_id = #{featureId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from feature
+    where feature_id = #{featureId,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="com.example.catdemo.entity.FeatureExample">
+    delete from feature
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.example.catdemo.entity.Feature">
+    insert into feature(feature_id,  feature_title_zh, feature_title_en, feature_description_zh,
+	 feature_description_en, feature_url, requires_subscription, type, 
+	 sort, seven_days_subscription_price, one_month_subscription_price, one_quarter_subscription_price, 
+	 one_year_subscription_price, has_discount, discount_rate, is_trial_available, 
+	 trial_duration, trial_duration_unit, created_at, updated_at, 
+	 icons, status)
+    values ( #{featureId,jdbcType=VARCHAR}, #{featureTitleZh,jdbcType=VARCHAR}, #{featureTitleEn,jdbcType=VARCHAR}, #{featureDescriptionZh,jdbcType=LONGVARCHAR},
+	 #{featureDescriptionEn,jdbcType=LONGVARCHAR}, #{featureUrl,jdbcType=VARCHAR}, #{requiresSubscription,jdbcType=TINYINT}, #{type,jdbcType=VARCHAR}, 
+	 #{sort,jdbcType=INTEGER}, #{sevenDaysSubscriptionPrice,jdbcType=DECIMAL}, #{oneMonthSubscriptionPrice,jdbcType=DECIMAL}, #{oneQuarterSubscriptionPrice,jdbcType=DECIMAL}, 
+	 #{oneYearSubscriptionPrice,jdbcType=DECIMAL}, #{hasDiscount,jdbcType=TINYINT}, #{discountRate,jdbcType=DECIMAL}, #{isTrialAvailable,jdbcType=TINYINT}, 
+	 #{trialDuration,jdbcType=INTEGER}, #{trialDurationUnit,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, 
+	 #{icons,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.example.catdemo.entity.Feature">
+
+    insert into feature
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="featureId != null">
+          feature_id,
+        </if>
+      <if test="featureTitleZh != null">
+        feature_title_zh,
+      </if>
+      <if test="featureTitleEn != null">
+        feature_title_en,
+      </if>
+      <if test="featureDescriptionZh != null">
+        feature_description_zh,
+      </if>
+      <if test="featureDescriptionEn != null">
+        feature_description_en,
+      </if>
+      <if test="featureUrl != null">
+        feature_url,
+      </if>
+      <if test="requiresSubscription != null">
+        requires_subscription,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="sevenDaysSubscriptionPrice != null">
+        seven_days_subscription_price,
+      </if>
+      <if test="oneMonthSubscriptionPrice != null">
+        one_month_subscription_price,
+      </if>
+      <if test="oneQuarterSubscriptionPrice != null">
+        one_quarter_subscription_price,
+      </if>
+      <if test="oneYearSubscriptionPrice != null">
+        one_year_subscription_price,
+      </if>
+      <if test="hasDiscount != null">
+        has_discount,
+      </if>
+      <if test="discountRate != null">
+        discount_rate,
+      </if>
+      <if test="isTrialAvailable != null">
+        is_trial_available,
+      </if>
+      <if test="trialDuration != null">
+        trial_duration,
+      </if>
+      <if test="trialDurationUnit != null">
+        trial_duration_unit,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="icons != null">
+        icons,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="featureId != null">
+          #{featureId,jdbcType=VARCHAR},
+        </if>
+      <if test="featureTitleZh != null">
+        #{featureTitleZh,jdbcType=VARCHAR},
+      </if>
+      <if test="featureTitleEn != null">
+        #{featureTitleEn,jdbcType=VARCHAR},
+      </if>
+      <if test="featureDescriptionZh != null">
+        #{featureDescriptionZh,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="featureDescriptionEn != null">
+        #{featureDescriptionEn,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="featureUrl != null">
+        #{featureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="requiresSubscription != null">
+        #{requiresSubscription,jdbcType=TINYINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="sevenDaysSubscriptionPrice != null">
+        #{sevenDaysSubscriptionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="oneMonthSubscriptionPrice != null">
+        #{oneMonthSubscriptionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="oneQuarterSubscriptionPrice != null">
+        #{oneQuarterSubscriptionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="oneYearSubscriptionPrice != null">
+        #{oneYearSubscriptionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="hasDiscount != null">
+        #{hasDiscount,jdbcType=TINYINT},
+      </if>
+      <if test="discountRate != null">
+        #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="isTrialAvailable != null">
+        #{isTrialAvailable,jdbcType=TINYINT},
+      </if>
+      <if test="trialDuration != null">
+        #{trialDuration,jdbcType=INTEGER},
+      </if>
+      <if test="trialDurationUnit != null">
+        #{trialDurationUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="icons != null">
+        #{icons,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="com.example.catdemo.entity.FeatureExample" resultType="java.lang.Long">
+    select count(*) from feature
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update feature
+    <set>
+      <if test="record.featureId != null">
+       feature_id = #{record.featureId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.featureTitleZh != null">
+       feature_title_zh = #{record.featureTitleZh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.featureTitleEn != null">
+       feature_title_en = #{record.featureTitleEn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.featureDescriptionZh != null">
+       feature_description_zh = #{record.featureDescriptionZh,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.featureDescriptionEn != null">
+       feature_description_en = #{record.featureDescriptionEn,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.featureUrl != null">
+       feature_url = #{record.featureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requiresSubscription != null">
+       requires_subscription = #{record.requiresSubscription,jdbcType=TINYINT},
+      </if>
+      <if test="record.type != null">
+       type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sort != null">
+       sort = #{record.sort,jdbcType=INTEGER},
+      </if>
+      <if test="record.sevenDaysSubscriptionPrice != null">
+       seven_days_subscription_price = #{record.sevenDaysSubscriptionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.oneMonthSubscriptionPrice != null">
+       one_month_subscription_price = #{record.oneMonthSubscriptionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.oneQuarterSubscriptionPrice != null">
+       one_quarter_subscription_price = #{record.oneQuarterSubscriptionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.oneYearSubscriptionPrice != null">
+       one_year_subscription_price = #{record.oneYearSubscriptionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.hasDiscount != null">
+       has_discount = #{record.hasDiscount,jdbcType=TINYINT},
+      </if>
+      <if test="record.discountRate != null">
+       discount_rate = #{record.discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.isTrialAvailable != null">
+       is_trial_available = #{record.isTrialAvailable,jdbcType=TINYINT},
+      </if>
+      <if test="record.trialDuration != null">
+       trial_duration = #{record.trialDuration,jdbcType=INTEGER},
+      </if>
+      <if test="record.trialDurationUnit != null">
+       trial_duration_unit = #{record.trialDurationUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdAt != null">
+       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedAt != null">
+       updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.icons != null">
+       icons = #{record.icons,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+       status = #{record.status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update feature
+    set feature_id = #{record.featureId,jdbcType=VARCHAR},
+	  feature_title_zh = #{record.featureTitleZh,jdbcType=VARCHAR},
+	  feature_title_en = #{record.featureTitleEn,jdbcType=VARCHAR},
+	  feature_description_zh = #{record.featureDescriptionZh,jdbcType=LONGVARCHAR},
+	  feature_description_en = #{record.featureDescriptionEn,jdbcType=LONGVARCHAR},
+	  feature_url = #{record.featureUrl,jdbcType=VARCHAR},
+	  requires_subscription = #{record.requiresSubscription,jdbcType=TINYINT},
+	  type = #{record.type,jdbcType=VARCHAR},
+	  sort = #{record.sort,jdbcType=INTEGER},
+	  seven_days_subscription_price = #{record.sevenDaysSubscriptionPrice,jdbcType=DECIMAL},
+	  one_month_subscription_price = #{record.oneMonthSubscriptionPrice,jdbcType=DECIMAL},
+	  one_quarter_subscription_price = #{record.oneQuarterSubscriptionPrice,jdbcType=DECIMAL},
+	  one_year_subscription_price = #{record.oneYearSubscriptionPrice,jdbcType=DECIMAL},
+	  has_discount = #{record.hasDiscount,jdbcType=TINYINT},
+	  discount_rate = #{record.discountRate,jdbcType=DECIMAL},
+	  is_trial_available = #{record.isTrialAvailable,jdbcType=TINYINT},
+	  trial_duration = #{record.trialDuration,jdbcType=INTEGER},
+	  trial_duration_unit = #{record.trialDurationUnit,jdbcType=VARCHAR},
+	  created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+	  updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+	  icons = #{record.icons,jdbcType=VARCHAR},
+	  status = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map">
+    update feature
+    set feature_id = #{record.featureId,jdbcType=VARCHAR},
+	  feature_title_zh = #{record.featureTitleZh,jdbcType=VARCHAR},
+	  feature_title_en = #{record.featureTitleEn,jdbcType=VARCHAR},
+	  feature_url = #{record.featureUrl,jdbcType=VARCHAR},
+	  requires_subscription = #{record.requiresSubscription,jdbcType=TINYINT},
+	  type = #{record.type,jdbcType=VARCHAR},
+	  sort = #{record.sort,jdbcType=INTEGER},
+	  seven_days_subscription_price = #{record.sevenDaysSubscriptionPrice,jdbcType=DECIMAL},
+	  one_month_subscription_price = #{record.oneMonthSubscriptionPrice,jdbcType=DECIMAL},
+	  one_quarter_subscription_price = #{record.oneQuarterSubscriptionPrice,jdbcType=DECIMAL},
+	  one_year_subscription_price = #{record.oneYearSubscriptionPrice,jdbcType=DECIMAL},
+	  has_discount = #{record.hasDiscount,jdbcType=TINYINT},
+	  discount_rate = #{record.discountRate,jdbcType=DECIMAL},
+	  is_trial_available = #{record.isTrialAvailable,jdbcType=TINYINT},
+	  trial_duration = #{record.trialDuration,jdbcType=INTEGER},
+	  trial_duration_unit = #{record.trialDurationUnit,jdbcType=VARCHAR},
+	  created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+	  updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+	  icons = #{record.icons,jdbcType=VARCHAR},
+	  status = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.catdemo.entity.Feature">
+    update feature
+    <set>
+      <if test="featureTitleZh != null">
+        feature_title_zh = #{featureTitleZh,jdbcType=VARCHAR},
+      </if>
+      <if test="featureTitleEn != null">
+        feature_title_en = #{featureTitleEn,jdbcType=VARCHAR},
+      </if>
+      <if test="featureDescriptionZh != null">
+        feature_description_zh = #{featureDescriptionZh,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="featureDescriptionEn != null">
+        feature_description_en = #{featureDescriptionEn,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="featureUrl != null">
+        feature_url = #{featureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="requiresSubscription != null">
+        requires_subscription = #{requiresSubscription,jdbcType=TINYINT},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="sevenDaysSubscriptionPrice != null">
+        seven_days_subscription_price = #{sevenDaysSubscriptionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="oneMonthSubscriptionPrice != null">
+        one_month_subscription_price = #{oneMonthSubscriptionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="oneQuarterSubscriptionPrice != null">
+        one_quarter_subscription_price = #{oneQuarterSubscriptionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="oneYearSubscriptionPrice != null">
+        one_year_subscription_price = #{oneYearSubscriptionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="hasDiscount != null">
+        has_discount = #{hasDiscount,jdbcType=TINYINT},
+      </if>
+      <if test="discountRate != null">
+        discount_rate = #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="isTrialAvailable != null">
+        is_trial_available = #{isTrialAvailable,jdbcType=TINYINT},
+      </if>
+      <if test="trialDuration != null">
+        trial_duration = #{trialDuration,jdbcType=INTEGER},
+      </if>
+      <if test="trialDurationUnit != null">
+        trial_duration_unit = #{trialDurationUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="icons != null">
+        icons = #{icons,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where feature_id = #{featureId,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.catdemo.entity.Feature">
+    update feature
+    set feature_title_zh = #{featureTitleZh,jdbcType=VARCHAR},
+	  feature_title_en = #{featureTitleEn,jdbcType=VARCHAR},
+	  feature_description_zh = #{featureDescriptionZh,jdbcType=LONGVARCHAR},
+	  feature_description_en = #{featureDescriptionEn,jdbcType=LONGVARCHAR},
+	  feature_url = #{featureUrl,jdbcType=VARCHAR},
+	  requires_subscription = #{requiresSubscription,jdbcType=TINYINT},
+	  type = #{type,jdbcType=VARCHAR},
+	  sort = #{sort,jdbcType=INTEGER},
+	  seven_days_subscription_price = #{sevenDaysSubscriptionPrice,jdbcType=DECIMAL},
+	  one_month_subscription_price = #{oneMonthSubscriptionPrice,jdbcType=DECIMAL},
+	  one_quarter_subscription_price = #{oneQuarterSubscriptionPrice,jdbcType=DECIMAL},
+	  one_year_subscription_price = #{oneYearSubscriptionPrice,jdbcType=DECIMAL},
+	  has_discount = #{hasDiscount,jdbcType=TINYINT},
+	  discount_rate = #{discountRate,jdbcType=DECIMAL},
+	  is_trial_available = #{isTrialAvailable,jdbcType=TINYINT},
+	  trial_duration = #{trialDuration,jdbcType=INTEGER},
+	  trial_duration_unit = #{trialDurationUnit,jdbcType=VARCHAR},
+	  created_at = #{createdAt,jdbcType=TIMESTAMP},
+	  updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+	  icons = #{icons,jdbcType=VARCHAR},
+	  status = #{status,jdbcType=VARCHAR}
+    where feature_id = #{featureId,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.Feature">
+    update feature
+    set feature_title_zh = #{featureTitleZh,jdbcType=VARCHAR},
+	  feature_title_en = #{featureTitleEn,jdbcType=VARCHAR},
+	  feature_url = #{featureUrl,jdbcType=VARCHAR},
+	  requires_subscription = #{requiresSubscription,jdbcType=TINYINT},
+	  type = #{type,jdbcType=VARCHAR},
+	  sort = #{sort,jdbcType=INTEGER},
+	  seven_days_subscription_price = #{sevenDaysSubscriptionPrice,jdbcType=DECIMAL},
+	  one_month_subscription_price = #{oneMonthSubscriptionPrice,jdbcType=DECIMAL},
+	  one_quarter_subscription_price = #{oneQuarterSubscriptionPrice,jdbcType=DECIMAL},
+	  one_year_subscription_price = #{oneYearSubscriptionPrice,jdbcType=DECIMAL},
+	  has_discount = #{hasDiscount,jdbcType=TINYINT},
+	  discount_rate = #{discountRate,jdbcType=DECIMAL},
+	  is_trial_available = #{isTrialAvailable,jdbcType=TINYINT},
+	  trial_duration = #{trialDuration,jdbcType=INTEGER},
+	  trial_duration_unit = #{trialDurationUnit,jdbcType=VARCHAR},
+	  created_at = #{createdAt,jdbcType=TIMESTAMP},
+	  updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+	  icons = #{icons,jdbcType=VARCHAR},
+	  status = #{status,jdbcType=VARCHAR}
+    where feature_id = #{featureId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -24,13 +24,22 @@ public class CaptchaController {
     RedisTemplate redisTemplate;
 
     @PostMapping("/generate")
-    public Response generateCaptcha(@RequestBody String username) {
+    public Response generateCaptcha(@RequestBody String string) {
         Random rand = new Random();
         String captcha = 100000 + rand.nextInt(900000) + "";
-        String key = username.replace("\"","") + "_captcha";
+        String key = string.replace("\"","") + "_captcha";
         redisTemplate.delete(key);
         redisTemplate.opsForValue().set(key, captcha, 1, TimeUnit.MINUTES);
         return Response.success(captcha);
+    }
 
+    @PostMapping("/getResetPasswordCaptcha")
+    public Response getResetPasswordCaptcha(@RequestBody String phone) {
+        Random rand = new Random();
+        String captcha = 100000 + rand.nextInt(900000) + "";
+        String key = phone.replace("\"","") + "_ResetPasswordCaptcha";
+        redisTemplate.delete(key);
+        redisTemplate.opsForValue().set(key, captcha, 1, TimeUnit.MINUTES);
+        return Response.success(captcha);
     }
 }

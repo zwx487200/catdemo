@@ -1,37 +1,114 @@
 package com.example.catdemo.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import java.util.List;
 import com.example.catdemo.entity.User;
-import org.apache.ibatis.annotations.*;
-
+import com.example.catdemo.entity.UserExample;
+import org.apache.ibatis.annotations.Select;
 
 /**
- * <p>
- *  Mapper 接口
- * </p>
- *
- * @author zhanhuibin
- * @since 2024-09-23
- */
+*  Mapper
+*
+* @author zhanhuibin
+* @since 2024-12-10 19:58
+*/
 @Mapper
 public interface UserMapper {
-    @Insert(value = "insert into user(userId, username, status, password,createTime) values (#{user.userId},#{user.username},#{user.status},#{user.password},#{user.createTime})")
-    void addUser(@Param("user") User user);
 
-    @Update("Update user set password = (#{password})  where username = (#{username})")
-    void updatePassword(String username, String password);
+    /**
+     * 列表查询
+     *
+     * @param example 条件
+     * @return 列表
+     */
+    List<User> selectByExample(UserExample example);
 
-    @Delete("DELETE FROM user WHERE username = #{username}")
-    void deleteUserByUsername(String username);
+    /**
+     * 根据主键id查询
+     *
+     * @param userid
+     * @return 记录信息
+     */
+    User selectByPrimaryKey(String userid);
 
-    void updateUserInfo(User user);
+    /**
+     * 根据主键删除数据
+     *
+     * @param userid
+     * @return 数量
+     */
+    int deleteByPrimaryKey(String userid);
 
-    //void deleteUser(String username);
+    /**
+     * 删除数据
+     *
+     * @param example 条件
+     * @return 删除数量
+     */
+    int deleteByExample(UserExample example);
+
+    /**
+     * 插入数据库记录（不建议使用）
+     *
+     * @param record
+     */
+    int insert(User record);
+
+    /**
+     * 插入数据库记录（建议使用）
+     *
+     * @param record 插入数据
+     * @return 插入数量
+     */
+    int insertSelective(User record);
+
+    /**
+     * 计数
+     *
+     * @param example 条件
+     * @return 数量
+     */
+    long countByExample(UserExample example);
+
+    /**
+     * 修改数据
+     *
+     * @param example 条件
+     * @return 更新数量
+     */
+    int updateByExampleSelective(@Param("example") UserExample example);
+
+    /**
+     * 修改数据
+     *
+     * @param example 条件
+     * @return 更新数量
+     */
+    int updateByExample(@Param("example") UserExample example);
+
+    /**
+     * 修改数据(推荐使用)
+     *
+     * @param record 更新值
+     * @return 更新数量
+     */
+    int updateByPrimaryKeySelective(User record);
+
+    /**
+     * 根据主键更新数据
+     *
+     * @param record 更新值
+     * @return 更新数量
+     */
+    int updateByPrimaryKey(User record);
+
+    @Select("SELECT * FROM user WHERE phone = #{phone}")
+    User getUserByPhone(String phone);
 
     @Select("Select count(*) from User where username = #{username}" )
     int getCountbyUser(String username);
 
     @Select("Select * from User where username = #{username}" )
     User getUserDetailsByUsername(String username);
-
-    User getUserDetails(String userId);
 }

@@ -28,9 +28,15 @@ public class User implements Serializable {
     String role;
     String lastLoginTime;
     String lastLoginIp;
+    // NEW新用户 LOGIN已登入 VIRTUAL虚拟用户
     String status;
+    String memberShip;
     Date createTime;
     String updateTime;
     String captcha;
+    String headImage;
+    String belongTo;
+    UserMembership userMembership;
+    String familyMemberId;
 
 }

@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.catdemo.mapper.UserSubscriptionMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.catdemo.entity.UserSubscription">
+    <id column="id" jdbcType="VARCHAR" property="id"/>
+    <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+    <result column="feature_id" jdbcType="VARCHAR" property="featureId"/>
+    <result column="subscription_start" jdbcType="TIMESTAMP" property="subscriptionStart"/>
+    <result column="subscription_end" jdbcType="TIMESTAMP" property="subscriptionEnd"/>
+    <result column="auto_renew" jdbcType="TINYINT" property="autoRenew"/>
+    <result column="is_trial" jdbcType="TINYINT" property="isTrial"/>
+    <result column="sort" jdbcType="INTEGER" property="sort"/>
+    <result column="status" jdbcType="VARCHAR" property="status"/>
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+    <association property="feature" javaType="com.example.catdemo.entity.Feature">
+      <id column="feature_id" jdbcType="VARCHAR" property="featureId"/>
+      <result column="feature_title_zh" jdbcType="VARCHAR" property="featureTitleZh"/>
+      <result column="feature_title_en" jdbcType="VARCHAR" property="featureTitleEn"/>
+      <result column="feature_url" jdbcType="VARCHAR" property="featureUrl"/>
+      <result column="requires_subscription" jdbcType="TINYINT" property="requiresSubscription"/>
+      <result column="feature_description_zh" jdbcType="LONGVARCHAR" property="featureDescriptionZh"/>
+      <result column="feature_description_en" jdbcType="LONGVARCHAR" property="featureDescriptionEn"/>
+      <result column="type" jdbcType="VARCHAR" property="type"/>
+      <result column="sort" jdbcType="INTEGER" property="sort"/>
+      <result column="seven_days_subscription_price" jdbcType="DECIMAL" property="sevenDaysSubscriptionPrice"/>
+      <result column="one_month_subscription_price" jdbcType="DECIMAL" property="oneMonthSubscriptionPrice"/>
+      <result column="one_quarter_subscription_price" jdbcType="DECIMAL" property="oneQuarterSubscriptionPrice"/>
+      <result column="one_year_subscription_price" jdbcType="DECIMAL" property="oneYearSubscriptionPrice"/>
+      <result column="has_discount" jdbcType="TINYINT" property="hasDiscount"/>
+      <result column="discount_rate" jdbcType="DECIMAL" property="discountRate"/>
+      <result column="is_trial_available" jdbcType="TINYINT" property="isTrialAvailable"/>
+      <result column="trial_duration" jdbcType="INTEGER" property="trialDuration"/>
+      <result column="trial_duration_unit" jdbcType="VARCHAR" property="trialDurationUnit"/>
+      <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+      <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+      <result column="icons" jdbcType="VARCHAR" property="icons"/>
+      <result column="status" jdbcType="VARCHAR" property="status"/>
+    </association>
+  </resultMap>
+
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+
+
+  <sql id="Base_Column_List">
+    id, user_id, feature_id, subscription_start, subscription_end, auto_renew, is_trial, 
+	sort, status, created_at, updated_at
+  </sql>
+  <select id="selectUserSubscriptionsWithFeature" parameterType="com.example.catdemo.entity.UserSubscriptionExample" resultMap="BaseResultMap">
+    SELECT
+    us.id,
+    us.user_id,
+    us.feature_id,
+    us.subscription_start,
+    us.subscription_end,
+    us.auto_renew,
+    us.is_trial,
+    us.sort,
+    us.status,
+    us.created_at,
+    us.updated_at,
+    f.*
+    FROM user_subscription us
+    LEFT JOIN feature f ON us.feature_id = f.feature_id
+      <if test="_parameter != null">
+        <include refid="Example_Where_Clause" />
+      </if>
+    ORDER BY us.sort
+    </select>
+
+
+
+  <select id="selectByExample" parameterType="com.example.catdemo.entity.UserSubscriptionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user_subscription
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_subscription
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from user_subscription
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="com.example.catdemo.entity.UserSubscriptionExample">
+    delete from user_subscription
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.example.catdemo.entity.UserSubscription">
+
+    insert into user_subscription(id, user_id, feature_id, subscription_start,
+	 subscription_end, auto_renew, is_trial, sort, status,
+	 created_at, updated_at)
+    values ( #{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{featureId,jdbcType=VARCHAR}, #{subscriptionStart,jdbcType=TIMESTAMP},
+	 #{subscriptionEnd,jdbcType=TIMESTAMP}, #{autoRenew,jdbcType=TINYINT}, #{isTrial,jdbcType=TINYINT}, #{sort,jdbcType=INTEGER}, 
+	 #{status,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.example.catdemo.entity.UserSubscription">
+
+    insert into user_subscription
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+          id,
+        </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="featureId != null">
+        feature_id,
+      </if>
+      <if test="subscriptionStart != null">
+        subscription_start,
+      </if>
+      <if test="subscriptionEnd != null">
+        subscription_end,
+      </if>
+      <if test="autoRenew != null">
+        auto_renew,
+      </if>
+      <if test="isTrial != null">
+        is_trial,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+        <if test="status != null">
+        status,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+          #{id,jdbcType=VARCHAR},
+        </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="featureId != null">
+        #{featureId,jdbcType=VARCHAR},
+      </if>
+      <if test="subscriptionStart != null">
+        #{subscriptionStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="subscriptionEnd != null">
+        #{subscriptionEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="autoRenew != null">
+        #{autoRenew,jdbcType=TINYINT},
+      </if>
+      <if test="isTrial != null">
+        #{isTrial,jdbcType=TINYINT},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+        <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="com.example.catdemo.entity.UserSubscriptionExample" resultType="java.lang.Long">
+    select count(*) from user_subscription
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update user_subscription
+    <set>
+      <if test="record.id != null">
+       id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null">
+       user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.featureId != null">
+       feature_id = #{record.featureId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subscriptionStart != null">
+       subscription_start = #{record.subscriptionStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.subscriptionEnd != null">
+       subscription_end = #{record.subscriptionEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.autoRenew != null">
+       auto_renew = #{record.autoRenew,jdbcType=TINYINT},
+      </if>
+      <if test="record.isTrial != null">
+       is_trial = #{record.isTrial,jdbcType=TINYINT},
+      </if>
+      <if test="record.sort != null">
+       sort = #{record.sort,jdbcType=INTEGER},
+      </if>
+        <if test="record.status != null">
+               status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdAt != null">
+       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedAt != null">
+       updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map">
+    update user_subscription
+    set id = #{record.id,jdbcType=VARCHAR},
+	  user_id = #{record.userId,jdbcType=VARCHAR},
+	  feature_id = #{record.featureId,jdbcType=VARCHAR},
+	  subscription_start = #{record.subscriptionStart,jdbcType=TIMESTAMP},
+	  subscription_end = #{record.subscriptionEnd,jdbcType=TIMESTAMP},
+	  auto_renew = #{record.autoRenew,jdbcType=TINYINT},
+	  is_trial = #{record.isTrial,jdbcType=TINYINT},
+	  sort = #{record.sort,jdbcType=INTEGER},
+	  status = #{record.status,jdbcType=VARCHAR},
+	  created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+	  updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.catdemo.entity.UserSubscription">
+    update user_subscription
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="featureId != null">
+        feature_id = #{featureId,jdbcType=VARCHAR},
+      </if>
+      <if test="subscriptionStart != null">
+        subscription_start = #{subscriptionStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="subscriptionEnd != null">
+        subscription_end = #{subscriptionEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="autoRenew != null">
+        auto_renew = #{autoRenew,jdbcType=TINYINT},
+      </if>
+      <if test="isTrial != null">
+        is_trial = #{isTrial,jdbcType=TINYINT},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+              <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+        </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.UserSubscription">
+    update user_subscription
+    set user_id = #{userId,jdbcType=VARCHAR},
+	  feature_id = #{featureId,jdbcType=VARCHAR},
+	  subscription_start = #{subscriptionStart,jdbcType=TIMESTAMP},
+	  subscription_end = #{subscriptionEnd,jdbcType=TIMESTAMP},
+	  auto_renew = #{autoRenew,jdbcType=TINYINT},
+	  is_trial = #{isTrial,jdbcType=TINYINT},
+	  sort = #{sort,jdbcType=INTEGER},
+	  status = #{status,jdbcType=VARCHAR},
+	  created_at = #{createdAt,jdbcType=TIMESTAMP},
+	  updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

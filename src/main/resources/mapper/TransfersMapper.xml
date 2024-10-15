@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.catdemo.mapper.TransfersMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.catdemo.entity.Transfers">
+    <id column="transfer_id" jdbcType="VARCHAR" property="transferId"/>
+    <result column="out_account_id" jdbcType="VARCHAR" property="outAccountId"/>
+    <result column="in_account_id" jdbcType="VARCHAR" property="inAccountId"/>
+    <result column="transfer_type" jdbcType="CHAR" property="transferType"/>
+    <result column="scheduled_transfer_time" jdbcType="TIMESTAMP" property="scheduledTransferTime"/>
+    <result column="periodic_transfer_time" jdbcType="CHAR" property="periodicTransferTime"/>
+    <result column="transfer_count" jdbcType="INTEGER" property="transferCount"/>
+    <result column="transfer_amount" jdbcType="DECIMAL" property="transferAmount"/>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    transfer_id, out_account_id, in_account_id, transfer_type, scheduled_transfer_time, periodic_transfer_time, transfer_count, 
+	transfer_amount
+  </sql>
+
+  <select id="selectByExample" parameterType="com.example.catdemo.entity.TransfersExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from transfers
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from transfers
+    where transfer_id = #{transferId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from transfers
+    where transfer_id = #{transferId,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="com.example.catdemo.entity.TransfersExample">
+    delete from transfers
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.example.catdemo.entity.Transfers">
+    <selectKey keyProperty="transferId" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into transfers(out_account_id, in_account_id, transfer_type, 
+	 scheduled_transfer_time, periodic_transfer_time, transfer_count, transfer_amount)
+    values (#{outAccountId,jdbcType=VARCHAR}, #{inAccountId,jdbcType=VARCHAR}, #{transferType,jdbcType=CHAR}, 
+	 #{scheduledTransferTime,jdbcType=TIMESTAMP}, #{periodicTransferTime,jdbcType=CHAR}, #{transferCount,jdbcType=INTEGER}, #{transferAmount,jdbcType=DECIMAL})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.example.catdemo.entity.Transfers">
+    insert into transfers
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+          transfer_id,
+      <if test="outAccountId != null">
+        out_account_id,
+      </if>
+      <if test="inAccountId != null">
+        in_account_id,
+      </if>
+      <if test="transferType != null">
+        transfer_type,
+      </if>
+      <if test="scheduledTransferTime != null">
+        scheduled_transfer_time,
+      </if>
+      <if test="periodicTransferTime != null">
+        periodic_transfer_time,
+      </if>
+      <if test="transferCount != null">
+        transfer_count,
+      </if>
+      <if test="transferAmount != null">
+        transfer_amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        uuid(),
+      <if test="outAccountId != null">
+        #{outAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="inAccountId != null">
+        #{inAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="transferType != null">
+        #{transferType,jdbcType=CHAR},
+      </if>
+      <if test="scheduledTransferTime != null">
+        #{scheduledTransferTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="periodicTransferTime != null">
+        #{periodicTransferTime,jdbcType=CHAR},
+      </if>
+      <if test="transferCount != null">
+        #{transferCount,jdbcType=INTEGER},
+      </if>
+      <if test="transferAmount != null">
+        #{transferAmount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="com.example.catdemo.entity.TransfersExample" resultType="java.lang.Long">
+    select count(*) from transfers
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update transfers
+    <set>
+      <if test="record.transferId != null">
+       transfer_id = #{record.transferId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outAccountId != null">
+       out_account_id = #{record.outAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inAccountId != null">
+       in_account_id = #{record.inAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transferType != null">
+       transfer_type = #{record.transferType,jdbcType=CHAR},
+      </if>
+      <if test="record.scheduledTransferTime != null">
+       scheduled_transfer_time = #{record.scheduledTransferTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.periodicTransferTime != null">
+       periodic_transfer_time = #{record.periodicTransferTime,jdbcType=CHAR},
+      </if>
+      <if test="record.transferCount != null">
+       transfer_count = #{record.transferCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.transferAmount != null">
+       transfer_amount = #{record.transferAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map">
+    update transfers
+    set transfer_id = #{record.transferId,jdbcType=VARCHAR},
+	  out_account_id = #{record.outAccountId,jdbcType=VARCHAR},
+	  in_account_id = #{record.inAccountId,jdbcType=VARCHAR},
+	  transfer_type = #{record.transferType,jdbcType=CHAR},
+	  scheduled_transfer_time = #{record.scheduledTransferTime,jdbcType=TIMESTAMP},
+	  periodic_transfer_time = #{record.periodicTransferTime,jdbcType=CHAR},
+	  transfer_count = #{record.transferCount,jdbcType=INTEGER},
+	  transfer_amount = #{record.transferAmount,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.catdemo.entity.Transfers">
+    update transfers
+    <set>
+      <if test="outAccountId != null">
+        out_account_id = #{outAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="inAccountId != null">
+        in_account_id = #{inAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="transferType != null">
+        transfer_type = #{transferType,jdbcType=CHAR},
+      </if>
+      <if test="scheduledTransferTime != null">
+        scheduled_transfer_time = #{scheduledTransferTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="periodicTransferTime != null">
+        periodic_transfer_time = #{periodicTransferTime,jdbcType=CHAR},
+      </if>
+      <if test="transferCount != null">
+        transfer_count = #{transferCount,jdbcType=INTEGER},
+      </if>
+      <if test="transferAmount != null">
+        transfer_amount = #{transferAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where transfer_id = #{transferId,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.Transfers">
+    update transfers
+    set out_account_id = #{outAccountId,jdbcType=VARCHAR},
+	  in_account_id = #{inAccountId,jdbcType=VARCHAR},
+	  transfer_type = #{transferType,jdbcType=CHAR},
+	  scheduled_transfer_time = #{scheduledTransferTime,jdbcType=TIMESTAMP},
+	  periodic_transfer_time = #{periodicTransferTime,jdbcType=CHAR},
+	  transfer_count = #{transferCount,jdbcType=INTEGER},
+	  transfer_amount = #{transferAmount,jdbcType=DECIMAL}
+    where transfer_id = #{transferId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -44,7 +44,7 @@ public class UserCheck {
             if (captcha.isEmpty()) {
                 return Response.error("300", "验证码不能为空");
             }
-            String key = user.getUsername() + "_captcha";
+            String key = user.getPhone() + "_captcha";
             String value = (String) redisTemplate.opsForValue().get(key);
             if (value == null) {
                 return Response.error("300", "验证码已失效");

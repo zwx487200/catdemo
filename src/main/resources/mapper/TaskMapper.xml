@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.catdemo.mapper.TaskMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.catdemo.entity.Task">
+    <id column="task_id" jdbcType="CHAR" property="taskId"/>
+    <result column="initiator_id" jdbcType="VARCHAR" property="initiatorId"/>
+    <result column="executor_id" jdbcType="VARCHAR" property="executorId"/>
+    <result column="task_type" jdbcType="CHAR" property="taskType"/>
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+    <result column="reward_type" jdbcType="CHAR" property="rewardType"/>
+    <result column="reward" jdbcType="VARCHAR" property="reward"/>
+    <result column="has_penalty" jdbcType="TINYINT" property="hasPenalty"/>
+    <result column="penalty" jdbcType="VARCHAR" property="penalty"/>
+    <result column="task_status" jdbcType="CHAR" property="taskStatus"/>
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+    <result column="initiator_name" jdbcType="VARCHAR" property="initiatorName"/>
+    <result column="task_content" jdbcType="LONGVARCHAR" property="taskContent"/>
+  </resultMap>
+<!--  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.catdemo.entity.Task">-->
+<!--    <result column="task_content" jdbcType="LONGVARCHAR" property="taskContent"/>-->
+<!--  </resultMap>-->
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    task_id, initiator_id, executor_id, task_type, task_content,start_time, end_time, reward_type,reward,
+	has_penalty, penalty, task_status, created_at
+  </sql>
+
+  <select id="selectByExampleWithBLOBs" parameterType="com.example.catdemo.entity.TaskExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByExample" parameterType="com.example.catdemo.entity.TaskExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,family_member.name as initiator_name
+    from task inner join family_member on task.initiator_id = family_member.member_id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from task
+    where task_id = #{taskId,jdbcType=CHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from task
+    where task_id = #{taskId,jdbcType=CHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="com.example.catdemo.entity.TaskExample">
+    delete from task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.example.catdemo.entity.Task">
+
+    insert into task(task_id,initiator_id, executor_id, task_type,
+	 start_time, end_time, reward_type, reward, has_penalty,
+	 penalty, task_content, task_status, created_at)
+    values (uuid(), #{executorId,jdbcType=CHAR}, #{taskType,jdbcType=CHAR},
+	 #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{rewardType,jdbcType=CHAR}, #{ #{reward,jdbcType=DECIMAL}, #{hasPenalty,jdbcType=TINYINT},
+	 #{penalty,jdbcType=DECIMAL}, #{taskContent,jdbcType=LONGVARCHAR}, #{taskStatus,jdbcType=CHAR}, #{createdAt,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.example.catdemo.entity.Task">
+
+    insert into task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        task_id,
+      <if test="initiatorId != null">
+        initiator_id,
+      </if>
+      <if test="executorId != null">
+        executor_id,
+      </if>
+      <if test="taskType != null">
+        task_type,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="rewardType != null">
+        reward_type,
+      </if>
+      <if test="reward != null">
+        reward,
+      </if>
+      <if test="hasPenalty != null">
+        has_penalty,
+      </if>
+      <if test="penalty != null">
+        penalty,
+      </if>
+      <if test="taskContent != null">
+        task_content,
+      </if>
+      <if test="taskStatus != null">
+        task_status,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        uuid(),
+      <if test="initiatorId != null">
+        #{initiatorId,jdbcType=CHAR},
+      </if>
+      <if test="executorId != null">
+        #{executorId,jdbcType=CHAR},
+      </if>
+      <if test="taskType != null">
+        #{taskType,jdbcType=CHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rewardType != null">
+        #{rewardType,jdbcType=CHAR},
+      </if>
+      <if test="reward != null">
+        #{reward,jdbcType=DECIMAL},
+      </if>
+      <if test="hasPenalty != null">
+        #{hasPenalty,jdbcType=TINYINT},
+      </if>
+      <if test="penalty != null">
+        #{penalty,jdbcType=DECIMAL},
+      </if>
+      <if test="taskContent != null">
+        #{taskContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="taskStatus != null">
+        #{taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="com.example.catdemo.entity.TaskExample" resultType="java.lang.Long">
+    select count(*) from task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update task
+    <set>
+      <if test="record.taskId != null">
+       task_id = #{record.taskId,jdbcType=CHAR},
+      </if>
+      <if test="record.initiatorId != null">
+       initiator_id = #{record.initiatorId,jdbcType=CHAR},
+      </if>
+      <if test="record.executorId != null">
+       executor_id = #{record.executorId,jdbcType=CHAR},
+      </if>
+      <if test="record.taskType != null">
+       task_type = #{record.taskType,jdbcType=CHAR},
+      </if>
+      <if test="record.startTime != null">
+       start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null">
+       end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+        <if test="record.rewardType != null">
+       reward_type = #{record.rewardType,jdbcType=CHAR},
+      </if>
+      <if test="record.reward != null">
+       reward = #{record.reward,jdbcType=DECIMAL},
+      </if>
+      <if test="record.hasPenalty != null">
+       has_penalty = #{record.hasPenalty,jdbcType=TINYINT},
+      </if>
+      <if test="record.penalty != null">
+       penalty = #{record.penalty,jdbcType=DECIMAL},
+      </if>
+      <if test="record.taskContent != null">
+       task_content = #{record.taskContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.taskStatus != null">
+       task_status = #{record.taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.createdAt != null">
+       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update task
+    set task_id = #{record.taskId,jdbcType=CHAR},
+	  initiator_id = #{record.initiatorId,jdbcType=CHAR},
+	  executor_id = #{record.executorId,jdbcType=CHAR},
+	  task_type = #{record.taskType,jdbcType=CHAR},
+	  start_time = #{record.startTime,jdbcType=TIMESTAMP},
+	  end_time = #{record.endTime,jdbcType=TIMESTAMP},
+	  reward_type = #{record.rewardType,jdbcType=CHAR},
+	  reward = #{record.reward,jdbcType=DECIMAL},
+	  has_penalty = #{record.hasPenalty,jdbcType=TINYINT},
+	  penalty = #{record.penalty,jdbcType=DECIMAL},
+	  task_content = #{record.taskContent,jdbcType=LONGVARCHAR},
+	  task_status = #{record.taskStatus,jdbcType=CHAR},
+	  created_at = #{record.createdAt,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map">
+    update task
+    set task_id = #{record.taskId,jdbcType=CHAR},
+	  initiator_id = #{record.initiatorId,jdbcType=CHAR},
+	  executor_id = #{record.executorId,jdbcType=CHAR},
+	  task_type = #{record.taskType,jdbcType=CHAR},
+	  start_time = #{record.startTime,jdbcType=TIMESTAMP},
+	  end_time = #{record.endTime,jdbcType=TIMESTAMP},
+	  reward_type = #{record.rewardType,jdbcType=CHAR},
+	  reward = #{record.reward,jdbcType=DECIMAL},
+	  has_penalty = #{record.hasPenalty,jdbcType=TINYINT},
+	  penalty = #{record.penalty,jdbcType=DECIMAL},
+	  task_status = #{record.taskStatus,jdbcType=CHAR},
+	  created_at = #{record.createdAt,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.catdemo.entity.Task">
+    update task
+    <set>
+      <if test="initiatorId != null">
+        initiator_id = #{initiatorId,jdbcType=CHAR},
+      </if>
+      <if test="executorId != null">
+        executor_id = #{executorId,jdbcType=CHAR},
+      </if>
+      <if test="taskType != null">
+        task_type = #{taskType,jdbcType=CHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+        <if test="rewardType != null">
+        reward_type = #{rewardType,jdbcType=CHAR},
+      </if>
+      <if test="reward != null">
+        reward = #{reward,jdbcType=DECIMAL},
+      </if>
+      <if test="hasPenalty != null">
+        has_penalty = #{hasPenalty,jdbcType=TINYINT},
+      </if>
+      <if test="penalty != null">
+        penalty = #{penalty,jdbcType=DECIMAL},
+      </if>
+      <if test="taskContent != null">
+        task_content = #{taskContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="taskStatus != null">
+        task_status = #{taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where task_id = #{taskId,jdbcType=CHAR}
+  </update>
+
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.catdemo.entity.Task">
+    update task
+    set initiator_id = #{initiatorId,jdbcType=CHAR},
+	  executor_id = #{executorId,jdbcType=CHAR},
+	  task_type = #{taskType,jdbcType=CHAR},
+	  start_time = #{startTime,jdbcType=TIMESTAMP},
+	  end_time = #{endTime,jdbcType=TIMESTAMP},
+	  reward_type = #{rewardType,jdbcType=CHAR},
+	  reward = #{reward,jdbcType=DECIMAL},
+	  has_penalty = #{hasPenalty,jdbcType=TINYINT},
+	  penalty = #{penalty,jdbcType=DECIMAL},
+	  task_content = #{taskContent,jdbcType=LONGVARCHAR},
+	  task_status = #{taskStatus,jdbcType=CHAR},
+	  created_at = #{createdAt,jdbcType=TIMESTAMP}
+    where task_id = #{taskId,jdbcType=CHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.Task">
+    update task
+    set initiator_id = #{initiatorId,jdbcType=CHAR},
+	  executor_id = #{executorId,jdbcType=CHAR},
+	  task_type = #{taskType,jdbcType=CHAR},
+	  start_time = #{startTime,jdbcType=TIMESTAMP},
+	  end_time = #{endTime,jdbcType=TIMESTAMP},
+	  reward_type = #{rewardType,jdbcType=CHAR},
+	  reward = #{reward,jdbcType=DECIMAL},
+	  has_penalty = #{hasPenalty,jdbcType=TINYINT},
+	  penalty = #{penalty,jdbcType=DECIMAL},
+	  task_status = #{taskStatus,jdbcType=CHAR},
+	  created_at = #{createdAt,jdbcType=TIMESTAMP}
+    where task_id = #{taskId,jdbcType=CHAR}
+  </update>
+</mapper>

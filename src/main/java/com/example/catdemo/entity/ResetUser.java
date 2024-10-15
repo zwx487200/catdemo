@@ -9,6 +9,9 @@ import java.io.Serializable;
 public class ResetUser extends User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+    FamilyMember familyMemberHouseOwner;
+    FamilyMember familyMemberForUpdate;
+    String oldPassword;
     String newPassword;
     String confirmPassword;
 }

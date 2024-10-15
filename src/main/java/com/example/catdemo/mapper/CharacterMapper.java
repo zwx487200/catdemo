@@ -2,6 +2,7 @@ package com.example.catdemo.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import com.example.catdemo.entity.Character;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,15 +18,13 @@ public interface CharacterMapper {
     /**
      * 根据主键id查询
      *
-     * @param characterId
      * @return 记录信息
      */
-    Character selectById(String characterId);
+    Character selectById(@Param("id")String id);
 
     /**
      * 查询集合
      *
-     * @param character
      * @return 记录信息
      */
     List<Character> selectByCharacter(Character character);
@@ -33,7 +32,6 @@ public interface CharacterMapper {
     /**
      * 根据主键删除数据
      *
-     * @param characterId
      * @return 数量
      */
     int deleteById(String characterId);
@@ -41,7 +39,6 @@ public interface CharacterMapper {
     /**
      * 插入数据库记录（不建议使用）
      *
-     * @param record
      */
     int insert(Character record);
 

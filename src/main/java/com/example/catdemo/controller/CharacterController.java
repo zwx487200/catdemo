@@ -25,7 +25,6 @@ public class CharacterController {
 
     @PostMapping("/queryCharacterList")
     public Response queryCharacterList(@RequestBody Character character) {
-//        PageHelper.startPage(requestInfo.getPageNum(), requestInfo.getPageSize());
         return iCharacterService.queryCharacterList(character);
     }
 
@@ -45,7 +44,7 @@ public class CharacterController {
     }
 
     @PostMapping("/deleteCharacter")
-    public Response deleteCharacter(@RequestBody Long id) {
+    public Response deleteCharacter(@RequestBody String id) {
         return iCharacterService.deleteCharacter(id);
     }
 

@@ -22,6 +22,6 @@ public interface ICharacterService {
 
     Response updateCharacter(Character character);
 
-    Response deleteCharacter(Long id);
+    Response deleteCharacter(String id);
 
 }

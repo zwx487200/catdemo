@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.catdemo.mapper.PetHealthRecordMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.catdemo.entity.PetHealthRecord">
+    <id column="id" jdbcType="VARCHAR" property="id"/>
+    <result column="pet_id" jdbcType="VARCHAR" property="petId"/>
+    <result column="record_date" jdbcType="DATE" property="recordDate"/>
+    <result column="record_type" jdbcType="CHAR" property="recordType"/>
+    <result column="veterinarian" jdbcType="VARCHAR" property="veterinarian"/>
+    <result column="next_visit" jdbcType="DATE" property="nextVisit"/>
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.catdemo.entity.PetHealthRecord">
+    <result column="description" jdbcType="LONGVARCHAR" property="description"/>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, pet_id, record_date, record_type, veterinarian, next_visit, created_at
+  </sql>
+  <sql id="Blob_Column_List">
+    description
+  </sql>
+
+  <select id="selectByExampleWithBLOBs" parameterType="com.example.catdemo.entity.PetHealthRecordExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pet_health_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByExample" parameterType="com.example.catdemo.entity.PetHealthRecordExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pet_health_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pet_health_record
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from pet_health_record
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="com.example.catdemo.entity.PetHealthRecordExample">
+    delete from pet_health_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.example.catdemo.entity.PetHealthRecord">
+
+    insert into pet_health_record(id,pet_id, record_date, record_type,
+	 description, veterinarian, next_visit, created_at)
+    values ( #{id,jdbcType=VARCHAR}, #{petId,jdbcType=VARCHAR}, #{recordDate,jdbcType=DATE}, #{recordType,jdbcType=CHAR},
+	 #{description,jdbcType=LONGVARCHAR}, #{veterinarian,jdbcType=VARCHAR}, #{nextVisit,jdbcType=DATE}, #{createdAt,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.example.catdemo.entity.PetHealthRecord">
+
+    insert into pet_health_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+        id,
+      </if>
+      <if test="petId != null">
+        pet_id,
+      </if>
+      <if test="recordDate != null">
+        record_date,
+      </if>
+      <if test="recordType != null">
+        record_type,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="veterinarian != null">
+        veterinarian,
+      </if>
+      <if test="nextVisit != null">
+        next_visit,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="petId != null">
+        #{petId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordDate != null">
+        #{recordDate,jdbcType=DATE},
+      </if>
+      <if test="recordType != null">
+        #{recordType,jdbcType=CHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="veterinarian != null">
+        #{veterinarian,jdbcType=VARCHAR},
+      </if>
+      <if test="nextVisit != null">
+        #{nextVisit,jdbcType=DATE},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="com.example.catdemo.entity.PetHealthRecordExample" resultType="java.lang.Long">
+    select count(*) from pet_health_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update pet_health_record
+    <set>
+      <if test="record.id != null">
+       id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.petId != null">
+       pet_id = #{record.petId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordDate != null">
+       record_date = #{record.recordDate,jdbcType=DATE},
+      </if>
+      <if test="record.recordType != null">
+       record_type = #{record.recordType,jdbcType=CHAR},
+      </if>
+      <if test="record.description != null">
+       description = #{record.description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.veterinarian != null">
+       veterinarian = #{record.veterinarian,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nextVisit != null">
+       next_visit = #{record.nextVisit,jdbcType=DATE},
+      </if>
+      <if test="record.createdAt != null">
+       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update pet_health_record
+    set id = #{record.id,jdbcType=VARCHAR},
+	  pet_id = #{record.petId,jdbcType=VARCHAR},
+	  record_date = #{record.recordDate,jdbcType=DATE},
+	  record_type = #{record.recordType,jdbcType=CHAR},
+	  description = #{record.description,jdbcType=LONGVARCHAR},
+	  veterinarian = #{record.veterinarian,jdbcType=VARCHAR},
+	  next_visit = #{record.nextVisit,jdbcType=DATE},
+	  created_at = #{record.createdAt,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map">
+    update pet_health_record
+    set id = #{record.id,jdbcType=VARCHAR},
+	  pet_id = #{record.petId,jdbcType=VARCHAR},
+	  record_date = #{record.recordDate,jdbcType=DATE},
+	  record_type = #{record.recordType,jdbcType=CHAR},
+	  veterinarian = #{record.veterinarian,jdbcType=VARCHAR},
+	  next_visit = #{record.nextVisit,jdbcType=DATE},
+	  created_at = #{record.createdAt,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.catdemo.entity.PetHealthRecord">
+    update pet_health_record
+    <set>
+      <if test="petId != null">
+        pet_id = #{petId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordDate != null">
+        record_date = #{recordDate,jdbcType=DATE},
+      </if>
+      <if test="recordType != null">
+        record_type = #{recordType,jdbcType=CHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="veterinarian != null">
+        veterinarian = #{veterinarian,jdbcType=VARCHAR},
+      </if>
+      <if test="nextVisit != null">
+        next_visit = #{nextVisit,jdbcType=DATE},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.catdemo.entity.PetHealthRecord">
+    update pet_health_record
+    set pet_id = #{petId,jdbcType=VARCHAR},
+	  record_date = #{recordDate,jdbcType=DATE},
+	  record_type = #{recordType,jdbcType=CHAR},
+	  description = #{description,jdbcType=LONGVARCHAR},
+	  veterinarian = #{veterinarian,jdbcType=VARCHAR},
+	  next_visit = #{nextVisit,jdbcType=DATE},
+	  created_at = #{createdAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.PetHealthRecord">
+    update pet_health_record
+    set pet_id = #{petId,jdbcType=VARCHAR},
+	  record_date = #{recordDate,jdbcType=DATE},
+	  record_type = #{recordType,jdbcType=CHAR},
+	  veterinarian = #{veterinarian,jdbcType=VARCHAR},
+	  next_visit = #{nextVisit,jdbcType=DATE},
+	  created_at = #{createdAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
