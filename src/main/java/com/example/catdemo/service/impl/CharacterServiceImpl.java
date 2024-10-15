@@ -8,9 +8,12 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -24,6 +27,12 @@ public class CharacterServiceImpl implements ICharacterService {
 
     @Autowired
     private CharacterMapper characterMapper;
+
+    @Value("${character.deletecheck}")
+    private boolean deletecheck;
+
+    @Value("${character.addcheck}")
+    private boolean addcheck;
 
     @Override
     public Response queryCharacter(Character character) {
@@ -44,35 +53,58 @@ public class CharacterServiceImpl implements ICharacterService {
 
     @Override
     public Response saveCharacter(Character character) {
-        // 查询是否已经存在
+        int count = 0;
         if(StringUtils.isNotBlank(character.getCharacterId())){
             Character existCharacter = characterMapper.selectById(character.getCharacterId());
             if(existCharacter!= null){
-                return Response.error("9999", "该数据已存在");
-            }else {
-                //character.setCharacterId(UUID.randomUUID().toString());
-                int count = characterMapper.insertSelective(character);
-                if(count == 0){
-                    return Response.error("9999", "插入数据失败");
+                if (!addcheck){
+                    count = characterMapper.updateByIdSelective(character);
+                } else {
+                    return Response.error("9999", "该数据已存在");
                 }
+            }else {
+                count = characterMapper.insertSelective(character);
             }
         } else {
-            character.setCharacterId(UUID.randomUUID().toString());
-            int count = characterMapper.insertSelective(character);
-            if(count == 0){
-                return Response.error("9999", "插入数据失败");
-            }
+            count = characterMapper.insertSelective(character);
+        }
+        if(count == 0){
+            return Response.error("9999", "插入数据失败");
         }
         return Response.success(character);
     }
 
     @Override
     public Response updateCharacter(Character character) {
-        return null;
+
+        // 先查询是否存在，如果不存在则新增，存在则修改
+        List<Character> characterList = characterMapper.selectByCharacter(character);
+        int count;
+        if (CollectionUtils.isEmpty(characterList)){
+            count = characterMapper.insertSelective(character);
+        } else {
+            count = characterMapper.updateByIdSelective(character);
+        }
+        if(count == 0){
+            return Response.error("9999", "修改数据失败");
+        }else{
+            return Response.success(character);
+        }
     }
 
     @Override
-    public Response deleteCharacter(Long id) {
-        return null;
+    public Response deleteCharacter(String id) {
+        id = id.replace("\"","");
+        // 系统参数，check 如果是true，需要校验是否存在，如果是否，不校验是否存在
+        Character character = characterMapper.selectById(id);
+        if (deletecheck && Objects.isNull(character)){
+            return Response.error("9999", "用户不存在");
+        }
+        int count = characterMapper.deleteById(id);
+        if (count == 0){
+            return Response.error("9999", "删除数据失败");
+        } else {
+            return Response.noDateSuccess();
+        }
     }
 }

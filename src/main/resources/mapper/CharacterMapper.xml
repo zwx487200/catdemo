@@ -14,12 +14,12 @@
     <result column="Introduction" jdbcType="LONGVARCHAR" property="introduction"/>
   </resultMap>
 
-  <select id="selectById" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
     select *
     from characterInfo
-    where characterId = #{characterId,jdbcType=VARCHAR}
+    where characterId = #{id,jdbcType=VARCHAR}
   </select>
-  <select id="selectByCharacter" resultType="com.example.catdemo.entity.Character"
+  <select id="selectByCharacter" resultMap="BaseResultMap"
           parameterType="com.example.catdemo.entity.Character">
     select * from characterInfo
       <where>
@@ -45,6 +45,7 @@
           </if>
         </trim>
       </where>
+    order by createTime desc
   </select>
 
   <delete id="deleteById" parameterType="java.lang.String">
