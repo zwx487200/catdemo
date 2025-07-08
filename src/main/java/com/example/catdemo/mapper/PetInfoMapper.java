@@ -11,10 +11,18 @@ import com.example.catdemo.entity.PetInfoExample;
 * 宠物基本信息表 Mapper
 *
 * @author zhanhuibin
-* @since 2025-05-14 14:56
+* @since 2025-05-19 20:12
 */
 @Mapper
 public interface PetInfoMapper extends BaseMapper<PetInfo> {
+
+    /**
+     * 查询记录包含BLOB信息
+     *
+     * @param example 查询条件
+     * @return 列表
+     */
+    List<PetInfo> selectByExampleWithBLOBs(PetInfoExample example);
 
     /**
      * 列表查询
@@ -81,6 +89,15 @@ public interface PetInfoMapper extends BaseMapper<PetInfo> {
     int updateByExampleSelective(@Param("record") PetInfo record, @Param("example") PetInfoExample example);
 
     /**
+     * 更新记录包含BLOB
+     *
+     * @param record  更新值
+     * @param example 条件
+     * @return 更新数量
+     */
+    int updateByExampleWithBLOBs(@Param("record") PetInfo record, @Param("example") PetInfoExample example);
+
+    /**
      * 修改数据
      *
      * @param record  更新值
@@ -96,6 +113,14 @@ public interface PetInfoMapper extends BaseMapper<PetInfo> {
      * @return 更新数量
      */
     int updateByPrimaryKeySelective(PetInfo record);
+
+    /**
+     * 根据主键更新数据
+     *
+     * @param record 更新值
+     * @return 更新数量
+     */
+    int updateByPrimaryKeyWithBLOBs(PetInfo record);
 
     /**
      * 根据主键更新数据

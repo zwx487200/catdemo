@@ -29,25 +29,22 @@ public class PetHealthRecordServiceImpl extends ServiceImpl<PetHealthRecordMappe
         }
         if (!StringUtils.hasLength(record.getPetId()) ||
             !StringUtils.hasLength(record.getRecordType()) ||
-            !StringUtils.hasLength(record.getDescription()) ||
             record.getRecordDate() == null) {
             
             String errorMessage = 
                 !StringUtils.hasLength(record.getPetId()) ? "宠物ID不能为空" :
                 !StringUtils.hasLength(record.getRecordType()) ? "档案类型不能为空" :
-                !StringUtils.hasLength(record.getDescription()) ? "档案描述不能为空" :
                 "档案日期不能为空";
             
             String errorCode = 
                 !StringUtils.hasLength(record.getPetId()) ? "1002" :
                 !StringUtils.hasLength(record.getRecordType()) ? "1003" :
-                !StringUtils.hasLength(record.getDescription()) ? "1004" :
                 "1005";
             
             return Response.error(errorCode, errorMessage);
         }
         record.setId(UUID.randomUUID().toString());
-        record.setCreatedAt(new Date());
+        record.setCreateTime(new Date());
         int result = baseMapper.insertSelective(record);
         if (result > 0){
             return Response.success(record);

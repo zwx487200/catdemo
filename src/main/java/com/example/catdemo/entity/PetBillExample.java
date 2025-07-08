@@ -10,7 +10,7 @@ import java.util.Date;
 * 宠物健康档案表 Example
 *
 * @author zhanhuibin
-* @since 2025-05-14 14:56
+* @since 2025-05-19 21:36
 */
 public class PetBillExample {
 
@@ -280,133 +280,73 @@ public class PetBillExample {
             return (Criteria) this;
         }
 
-        public Criteria andPetBillDateIsNull() {
-            addCriterion("pet_bill_date is null");
+        public Criteria andBillTypeIsNull() {
+            addCriterion("bill_type is null");
             return (Criteria) this;
         }
 
-        public Criteria andPetBillDateIsNotNull() {
-            addCriterion("pet_bill_date is not null");
+        public Criteria andBillTypeIsNotNull() {
+            addCriterion("bill_type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPetBillDateEqualTo(Date value) {
-            addCriterionForJDBCDate("pet_bill_date =", value, "petBillDate");
+        public Criteria andBillTypeEqualTo(String value) {
+            addCriterion("bill_type =", value, "billType");
             return (Criteria) this;
         }
 
-        public Criteria andPetBillDateNotEqualTo(Date value) {
-            addCriterionForJDBCDate("pet_bill_date <>", value, "petBillDate");
+        public Criteria andBillTypeNotEqualTo(String value) {
+            addCriterion("bill_type <>", value, "billType");
             return (Criteria) this;
         }
 
-        public Criteria andPetBillDateGreaterThan(Date value) {
-            addCriterionForJDBCDate("pet_bill_date >", value, "petBillDate");
+        public Criteria andBillTypeGreaterThan(String value) {
+            addCriterion("bill_type >", value, "billType");
             return (Criteria) this;
         }
 
-        public Criteria andPetBillDateGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("pet_bill_date >=", value, "petBillDate");
+        public Criteria andBillTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("bill_type >=", value, "billType");
             return (Criteria) this;
         }
 
-        public Criteria andPetBillDateLessThan(Date value) {
-            addCriterionForJDBCDate("pet_bill_date <", value, "petBillDate");
+        public Criteria andBillTypeLessThan(String value) {
+            addCriterion("bill_type <", value, "billType");
             return (Criteria) this;
         }
 
-        public Criteria andPetBillDateLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("pet_bill_date <=", value, "petBillDate");
+        public Criteria andBillTypeLessThanOrEqualTo(String value) {
+            addCriterion("bill_type <=", value, "billType");
             return (Criteria) this;
         }
 
-        public Criteria andPetBillDateIn(List<Date> values) {
-            addCriterionForJDBCDate("pet_bill_date in", values, "petBillDate");
+        public Criteria andBillTypeLike(String value) {
+            addCriterion("bill_type like", value, "billType");
             return (Criteria) this;
         }
 
-        public Criteria andPetBillDateNotIn(List<Date> values) {
-            addCriterionForJDBCDate("pet_bill_date not in", values, "petBillDate");
+        public Criteria andBillTypeNotLike(String value) {
+            addCriterion("bill_type not like", value, "billType");
             return (Criteria) this;
         }
 
-        public Criteria andPetBillDateBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("pet_bill_date between", value1, value2, "petBillDate");
+        public Criteria andBillTypeIn(List<String> values) {
+            addCriterion("bill_type in", values, "billType");
             return (Criteria) this;
         }
 
-        public Criteria andPetBillDateNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("pet_bill_date not between", value1, value2, "petBillDate");
+        public Criteria andBillTypeNotIn(List<String> values) {
+            addCriterion("bill_type not in", values, "billType");
             return (Criteria) this;
         }
 
-        public Criteria andPetBillTypeIsNull() {
-            addCriterion("pet_bill_type is null");
+        public Criteria andBillTypeBetween(String value1, String value2) {
+            addCriterion("bill_type between", value1, value2, "billType");
             return (Criteria) this;
         }
 
-        public Criteria andPetBillTypeIsNotNull() {
-            addCriterion("pet_bill_type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPetBillTypeEqualTo(String value) {
-            addCriterion("pet_bill_type =", value, "petBillType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPetBillTypeNotEqualTo(String value) {
-            addCriterion("pet_bill_type <>", value, "petBillType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPetBillTypeGreaterThan(String value) {
-            addCriterion("pet_bill_type >", value, "petBillType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPetBillTypeGreaterThanOrEqualTo(String value) {
-            addCriterion("pet_bill_type >=", value, "petBillType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPetBillTypeLessThan(String value) {
-            addCriterion("pet_bill_type <", value, "petBillType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPetBillTypeLessThanOrEqualTo(String value) {
-            addCriterion("pet_bill_type <=", value, "petBillType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPetBillTypeLike(String value) {
-            addCriterion("pet_bill_type like", value, "petBillType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPetBillTypeNotLike(String value) {
-            addCriterion("pet_bill_type not like", value, "petBillType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPetBillTypeIn(List<String> values) {
-            addCriterion("pet_bill_type in", values, "petBillType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPetBillTypeNotIn(List<String> values) {
-            addCriterion("pet_bill_type not in", values, "petBillType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPetBillTypeBetween(String value1, String value2) {
-            addCriterion("pet_bill_type between", value1, value2, "petBillType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPetBillTypeNotBetween(String value1, String value2) {
-            addCriterion("pet_bill_type not between", value1, value2, "petBillType");
+        public Criteria andBillTypeNotBetween(String value1, String value2) {
+            addCriterion("bill_type not between", value1, value2, "billType");
             return (Criteria) this;
         }
 
@@ -467,6 +407,196 @@ public class PetBillExample {
 
         public Criteria andAmountNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("amount not between", value1, value2, "amount");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillDateIsNull() {
+            addCriterion("bill_date is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillDateIsNotNull() {
+            addCriterion("bill_date is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillDateEqualTo(Date value) {
+            addCriterionForJDBCDate("bill_date =", value, "billDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillDateNotEqualTo(Date value) {
+            addCriterionForJDBCDate("bill_date <>", value, "billDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillDateGreaterThan(Date value) {
+            addCriterionForJDBCDate("bill_date >", value, "billDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillDateGreaterThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("bill_date >=", value, "billDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillDateLessThan(Date value) {
+            addCriterionForJDBCDate("bill_date <", value, "billDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillDateLessThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("bill_date <=", value, "billDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillDateIn(List<Date> values) {
+            addCriterionForJDBCDate("bill_date in", values, "billDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillDateNotIn(List<Date> values) {
+            addCriterionForJDBCDate("bill_date not in", values, "billDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillDateBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("bill_date between", value1, value2, "billDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillDateNotBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("bill_date not between", value1, value2, "billDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodIsNull() {
+            addCriterion("payment_method is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodIsNotNull() {
+            addCriterion("payment_method is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodEqualTo(Integer value) {
+            addCriterion("payment_method =", value, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodNotEqualTo(Integer value) {
+            addCriterion("payment_method <>", value, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodGreaterThan(Integer value) {
+            addCriterion("payment_method >", value, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodGreaterThanOrEqualTo(Integer value) {
+            addCriterion("payment_method >=", value, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodLessThan(Integer value) {
+            addCriterion("payment_method <", value, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodLessThanOrEqualTo(Integer value) {
+            addCriterion("payment_method <=", value, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodIn(List<Integer> values) {
+            addCriterion("payment_method in", values, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodNotIn(List<Integer> values) {
+            addCriterion("payment_method not in", values, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodBetween(Integer value1, Integer value2) {
+            addCriterion("payment_method between", value1, value2, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodNotBetween(Integer value1, Integer value2) {
+            addCriterion("payment_method not between", value1, value2, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryIsNull() {
+            addCriterion("category is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryIsNotNull() {
+            addCriterion("category is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryEqualTo(String value) {
+            addCriterion("category =", value, "category");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryNotEqualTo(String value) {
+            addCriterion("category <>", value, "category");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryGreaterThan(String value) {
+            addCriterion("category >", value, "category");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryGreaterThanOrEqualTo(String value) {
+            addCriterion("category >=", value, "category");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryLessThan(String value) {
+            addCriterion("category <", value, "category");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryLessThanOrEqualTo(String value) {
+            addCriterion("category <=", value, "category");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryLike(String value) {
+            addCriterion("category like", value, "category");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryNotLike(String value) {
+            addCriterion("category not like", value, "category");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryIn(List<String> values) {
+            addCriterion("category in", values, "category");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryNotIn(List<String> values) {
+            addCriterion("category not in", values, "category");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryBetween(String value1, String value2) {
+            addCriterion("category between", value1, value2, "category");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryNotBetween(String value1, String value2) {
+            addCriterion("category not between", value1, value2, "category");
             return (Criteria) this;
         }
 
@@ -610,63 +740,123 @@ public class PetBillExample {
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtIsNull() {
-            addCriterion("created_at is null");
+        public Criteria andCreateTimeIsNull() {
+            addCriterion("create_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtIsNotNull() {
-            addCriterion("created_at is not null");
+        public Criteria andCreateTimeIsNotNull() {
+            addCriterion("create_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtEqualTo(Date value) {
-            addCriterion("created_at =", value, "createdAt");
+        public Criteria andCreateTimeEqualTo(Date value) {
+            addCriterion("create_time =", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtNotEqualTo(Date value) {
-            addCriterion("created_at <>", value, "createdAt");
+        public Criteria andCreateTimeNotEqualTo(Date value) {
+            addCriterion("create_time <>", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtGreaterThan(Date value) {
-            addCriterion("created_at >", value, "createdAt");
+        public Criteria andCreateTimeGreaterThan(Date value) {
+            addCriterion("create_time >", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtGreaterThanOrEqualTo(Date value) {
-            addCriterion("created_at >=", value, "createdAt");
+        public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("create_time >=", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtLessThan(Date value) {
-            addCriterion("created_at <", value, "createdAt");
+        public Criteria andCreateTimeLessThan(Date value) {
+            addCriterion("create_time <", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtLessThanOrEqualTo(Date value) {
-            addCriterion("created_at <=", value, "createdAt");
+        public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("create_time <=", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtIn(List<Date> values) {
-            addCriterion("created_at in", values, "createdAt");
+        public Criteria andCreateTimeIn(List<Date> values) {
+            addCriterion("create_time in", values, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtNotIn(List<Date> values) {
-            addCriterion("created_at not in", values, "createdAt");
+        public Criteria andCreateTimeNotIn(List<Date> values) {
+            addCriterion("create_time not in", values, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtBetween(Date value1, Date value2) {
-            addCriterion("created_at between", value1, value2, "createdAt");
+        public Criteria andCreateTimeBetween(Date value1, Date value2) {
+            addCriterion("create_time between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtNotBetween(Date value1, Date value2) {
-            addCriterion("created_at not between", value1, value2, "createdAt");
+        public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("create_time not between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeIsNull() {
+            addCriterion("update_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeIsNotNull() {
+            addCriterion("update_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeEqualTo(Date value) {
+            addCriterion("update_time =", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeNotEqualTo(Date value) {
+            addCriterion("update_time <>", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeGreaterThan(Date value) {
+            addCriterion("update_time >", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("update_time >=", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeLessThan(Date value) {
+            addCriterion("update_time <", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("update_time <=", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeIn(List<Date> values) {
+            addCriterion("update_time in", values, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeNotIn(List<Date> values) {
+            addCriterion("update_time not in", values, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeBetween(Date value1, Date value2) {
+            addCriterion("update_time between", value1, value2, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
 

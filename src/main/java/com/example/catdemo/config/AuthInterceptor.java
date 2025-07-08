@@ -21,11 +21,11 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
         // 使用 sa-token 框架提供的方法校验 token 的有效性
-        if (!StpUtil.isLogin()) {
-            System.out.println("用户未登录或登入已超时");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return false;
-        }
+//        if (!StpUtil.isLogin()) {
+//            System.out.println("用户未登录或登入已超时");
+//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            return false;
+//        }
         return true;
     }
 }

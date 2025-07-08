@@ -1,13 +1,17 @@
 package com.example.catdemo.service.impl;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.TypeReference;
 import com.example.catdemo.entity.PetInfoExample;
 import com.example.catdemo.service.PetInfoService;
 import com.example.catdemo.entity.PetInfo;
 import com.example.catdemo.mapper.PetInfoMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.catdemo.utils.RequestInfo;
 import com.example.catdemo.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
@@ -27,18 +31,9 @@ public class PetInfoServiceImpl extends ServiceImpl<PetInfoMapper, PetInfo> impl
 
     @Override
     public Response addPetInfo(PetInfo petInfo) {
-        if (petInfo == null){
-            return Response.error("1001", "宠物信息不能为空");
-        }
-        if (StringUtils.hasLength(petInfo.getName())){
-            return Response.error("1002", "宠物名称不能为空");
-        }
-        if (StringUtils.hasLength(petInfo.getOwnerId())){
-            return Response.error("1006", "宠物所有人不能为空");
-        }
         petInfo.setId(UUID.randomUUID().toString());
-        petInfo.setCreatedAt(new Date());
-        petInfo.setUpdatedAt(new Date());
+        petInfo.setCreateTime(new Date());
+        petInfo.setUpdateTime(new Date());
         int result = petInfoMapper.insertSelective(petInfo);
         if (result > 0){
             return Response.success(petInfo);
@@ -49,12 +44,6 @@ public class PetInfoServiceImpl extends ServiceImpl<PetInfoMapper, PetInfo> impl
 
     @Override
     public Response getPetInfoById(PetInfo petInfo) {
-        if (petInfo == null){
-            return Response.error("1001", "宠物信息不能为空");
-        }
-        if (StringUtils.hasLength(petInfo.getId())){
-            return Response.error("1004", "宠物ID不能为空");
-        }
         PetInfo result = petInfoMapper.selectByPrimaryKey(petInfo.getId());
         if (result != null){
             return Response.success(result);
@@ -66,13 +55,7 @@ public class PetInfoServiceImpl extends ServiceImpl<PetInfoMapper, PetInfo> impl
 
     @Override
     public Response updatePetInfo(PetInfo petInfo) {
-        if (petInfo == null){
-            return Response.error("1001", "宠物信息不能为空");
-        }
-        if (!StringUtils.hasLength(petInfo.getId())){
-            return Response.error("1004", "宠物ID不能为空");
-        }
-        petInfo.setUpdatedAt(new Date());
+        petInfo.setUpdateTime(new Date());
         int result = petInfoMapper.updateByPrimaryKeySelective(petInfo);
         if (result > 0){
             return Response.success(petInfo);
@@ -83,12 +66,6 @@ public class PetInfoServiceImpl extends ServiceImpl<PetInfoMapper, PetInfo> impl
 
     @Override
     public Response deletePetInfo(PetInfo petInfo) {
-        if (petInfo == null){
-            return Response.error("1001", "宠物信息不能为空");
-        }
-        if (StringUtils.hasLength(petInfo.getId())){
-            return Response.error("1004", "宠物ID不能为空");
-        }
         int result = petInfoMapper.deleteByPrimaryKey(petInfo.getId());
         if (result > 0){
             return Response.success(petInfo);
@@ -98,23 +75,31 @@ public class PetInfoServiceImpl extends ServiceImpl<PetInfoMapper, PetInfo> impl
     }
 
     @Override
-    public Response getPetInfoList(PetInfo petInfo) {
-        if (petInfo == null){
-            return Response.error("1001", "宠物信息不能为空");
+    public Response getPetInfoList(RequestInfo requestInfo) {
+        PetInfo petInfo =new PetInfo();
+        if (requestInfo.getData() != null){
+            petInfo = JSON.parseObject(JSON.toJSONString(requestInfo.getData()), new TypeReference<PetInfo>() { });
+            if(petInfo!=null){
+                if (!StringUtils.hasLength(petInfo.getOwnerId()) || !StringUtils.hasLength(petInfo.getId())){
+                    return Response.error("1004", "宠物ID或所有人不能为空");
+                }
+            }
         }
-        if (!StringUtils.hasLength(petInfo.getOwnerId()) || !StringUtils.hasLength(petInfo.getId())){
-            return Response.error("1004", "宠物ID或所有人不能为空");
-        }
+
+
         PetInfoExample example = new PetInfoExample();
-        example.setOrderByClause("id desc");
+        example.setOrderByClause("update_time desc");
         if (StringUtils.hasLength(petInfo.getId())){
             example.createCriteria().andIdEqualTo(petInfo.getId());
         }
         if (StringUtils.hasLength(petInfo.getOwnerId())){
             example.createCriteria().andOwnerIdEqualTo(petInfo.getOwnerId());
         }
-        if (StringUtils.hasLength(petInfo.getName())){
-            example.createCriteria().andNameLike("%" + petInfo.getName() + "%");
+        if (StringUtils.hasLength(petInfo.getPetName())){
+            example.createCriteria().andPetNameLike("%" + petInfo.getPetName() + "%");
+        }
+        if (!CollectionUtils.isEmpty(requestInfo.getFamilyMemberIds())){
+            example.createCriteria().andOwnerIdIn(requestInfo.getFamilyMemberIds());
         }
         return Response.success(petInfoMapper.selectByExample(example));
     }

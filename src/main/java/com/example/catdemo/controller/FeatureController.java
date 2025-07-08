@@ -1,11 +1,13 @@
 package com.example.catdemo.controller;
 
 import com.example.catdemo.entity.Feature;
+import com.example.catdemo.entity.group.addGroup;
 import com.example.catdemo.service.FeatureService;
 import com.example.catdemo.utils.RequestInfo;
 import com.example.catdemo.utils.Response;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -24,7 +26,7 @@ public class FeatureController {
 
     @ApiOperation(value = "添加功能")
     @PostMapping("/addFeature")
-    public Response addFeature(@RequestBody Feature feature) {
+    public Response addFeature(@Validated(addGroup.class) @RequestBody Feature feature) {
         return featureService.createFeature(feature);
     }
 

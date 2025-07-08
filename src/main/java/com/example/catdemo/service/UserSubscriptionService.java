@@ -28,4 +28,6 @@ public interface UserSubscriptionService {
 
     Response getSubscriptionByUserIdAndSubscriptionId(String userId, String subscriptionId);
 
+    Response getUserNotSubscriptionByUserId(String userId);
+
 }

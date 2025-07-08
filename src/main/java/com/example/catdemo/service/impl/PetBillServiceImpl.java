@@ -25,33 +25,8 @@ public class PetBillServiceImpl extends ServiceImpl<PetBillMapper, PetBill> impl
 
     @Override
     public Response addPetBill(PetBill petBill) {
-        if (petBill == null){
-            return Response.error("1001", "宠物健康档案不能为空");
-        }
-        if (petBill.getPetId() == null){
-            return Response.error("1002",  "宠物ID不能为空");
-        }
-        if (petBill.getPetBillDate() == null){
-            return Response.error("1003",  "档案日期不能为空");
-        }
-        if (petBill.getPetBillType() == null){
-            return Response.error("1004",  "档案类型不能为空");
-        }
-        if (petBill.getAmount() == null){
-            return Response.error("1005",  "金额不能为空");
-        }
-        if (petBill.getDescription() == null){
-            return Response.error("1006",  "档案描述不能为空");
-        }
-        if (petBill.getFamilyId() == null){
-            return Response.error("1007",  "家庭ID不能为空");
-        }
-        if (petBill.getCreatedBy() == null){
-            return Response.error("1008",  "创建人不能为空");
-        }
-
         petBill.setId(UUID.randomUUID().toString());
-        petBill.setCreatedAt(new Date());
+        petBill.setCreateTime(new Date());
         int result = baseMapper.insertSelective(petBill);
         if (result > 0){
             return Response.success(petBill);
@@ -62,12 +37,6 @@ public class PetBillServiceImpl extends ServiceImpl<PetBillMapper, PetBill> impl
 
     @Override
     public Response getPetBill(PetBill petBill) {
-        if (petBill == null){
-            return Response.error("1001", "宠物健康档案不能为空");
-        }
-        if (!StringUtils.hasLength(petBill.getId())){
-            return Response.error("1002", "宠物健康档案ID不能为空");
-        }
         PetBill result = baseMapper.selectByPrimaryKey(petBill.getId());
         if (result != null){
             return Response.success(result);
@@ -78,12 +47,6 @@ public class PetBillServiceImpl extends ServiceImpl<PetBillMapper, PetBill> impl
 
     @Override
     public Response updatePetBill(PetBill petBill) {
-        if (petBill == null){
-            return Response.error("1001", "宠物健康档案不能为空");
-        }
-        if (!StringUtils.hasLength(petBill.getId())){
-            return Response.error("1002", "宠物健康档案ID不能为空");
-        }
         int result = baseMapper.updateByPrimaryKeySelective(petBill);
         if (result > 0){
             return Response.success(petBill);
@@ -94,12 +57,6 @@ public class PetBillServiceImpl extends ServiceImpl<PetBillMapper, PetBill> impl
 
     @Override
     public Response deletePetBill(PetBill petBill) {
-        if (petBill == null){
-            return Response.error("1001", "宠物健康档案不能为空");
-        }
-        if (!StringUtils.hasLength(petBill.getId())){
-            return Response.error("1002", "宠物健康档案ID不能为空");
-        }
         int result = baseMapper.deleteByPrimaryKey(petBill.getId());
         if (result > 0){
             return Response.success("删除成功");
@@ -110,9 +67,6 @@ public class PetBillServiceImpl extends ServiceImpl<PetBillMapper, PetBill> impl
 
     @Override
     public Response getPetBillList(PetBill petBill) {
-        if (petBill == null){
-            return Response.error("1001", "宠物健康档案不能为空");
-        }
         if (!StringUtils.hasLength(petBill.getPetId()) || !StringUtils.hasLength(petBill.getFamilyId())
                 || !StringUtils.hasLength(petBill.getCreatedBy())){
             return Response.error("1002", "参数不能为空");

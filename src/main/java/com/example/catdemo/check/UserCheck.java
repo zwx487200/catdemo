@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Data
 @Service
 public class UserCheck {
@@ -45,7 +47,7 @@ public class UserCheck {
                 return Response.error("300", "验证码不能为空");
             }
             String key = user.getPhone() + "_captcha";
-            String value = (String) redisTemplate.opsForValue().get(key);
+            String value = Objects.requireNonNull(redisTemplate.opsForValue().get(key)).toString();
             if (value == null) {
                 return Response.error("300", "验证码已失效");
             }

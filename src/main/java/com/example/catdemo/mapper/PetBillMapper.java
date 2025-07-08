@@ -11,7 +11,7 @@ import com.example.catdemo.entity.PetBillExample;
 * 宠物健康档案表 Mapper
 *
 * @author zhanhuibin
-* @since 2025-05-14 14:56
+* @since 2025-05-19 21:36
 */
 @Mapper
 public interface PetBillMapper extends BaseMapper<PetBill> {

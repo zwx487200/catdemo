@@ -1,9 +1,13 @@
 package com.example.catdemo.controller;
 
 import com.example.catdemo.entity.FamilyMember;
+import com.example.catdemo.entity.group.deleteGroup;
+import com.example.catdemo.entity.group.queryGroup;
+import com.example.catdemo.entity.group.updateGroup;
 import com.example.catdemo.service.FamilyMemberService;
 import com.example.catdemo.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,19 +39,19 @@ public class FamilyMemberController {
 
     // 查询家庭成员
     @PostMapping("/queryFamilyMemberById")
-    public Response queryFamilyMemberById(@RequestBody FamilyMember familyMember) {
+    public Response queryFamilyMemberById( @Validated(queryGroup.class) @RequestBody FamilyMember familyMember) {
         return familyMemberService.getFamilyMember(familyMember.getMemberId());
         }
 
     // 绑定已有家庭成员
     // 新增家庭成员
     @PostMapping("/deleteFamilyMember")
-    public Response deleteFamilyMember(@RequestBody FamilyMember familyMember) {
+    public Response deleteFamilyMember(@Validated(deleteGroup.class) @RequestBody FamilyMember familyMember) {
         return familyMemberService.deleteFamilyMember(familyMember.getMemberId());
     }
 
     @PostMapping("/updateFamilyMember")
-    public Response updateFamilyMember(@RequestBody FamilyMember familyMember) {
+    public Response updateFamilyMember(@Validated(updateGroup.class) @RequestBody FamilyMember familyMember) {
         return familyMemberService.updateFamilyMember(familyMember);
     }
 

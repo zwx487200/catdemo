@@ -16,6 +16,7 @@ public class RequestInfo  {
     int pageNum;
     int totalCount;
     String token;
+    String familyId;
     List<String> familyMemberIds;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

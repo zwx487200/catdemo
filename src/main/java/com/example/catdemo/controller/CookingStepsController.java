@@ -4,13 +4,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 待办事项核心表 前端控制器
+ * 烹饪步骤表 前端控制器
  *
  * @author zhanhuibin
- * @since 2025-03-24 17:16
+ * @since 2025-06-03 11:15
  */
 @RestController
-@RequestMapping("/todos")
-public class TodosController {
+@RequestMapping("/cooking-steps")
+public class CookingStepsController {
 
 }

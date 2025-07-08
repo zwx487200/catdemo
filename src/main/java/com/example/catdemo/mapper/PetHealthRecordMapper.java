@@ -11,7 +11,7 @@ import com.example.catdemo.entity.PetHealthRecordExample;
 * 宠物健康档案表 Mapper
 *
 * @author zhanhuibin
-* @since 2025-05-14 14:56
+* @since 2025-05-19 20:12
 */
 @Mapper
 public interface PetHealthRecordMapper extends BaseMapper<PetHealthRecord> {

@@ -3,6 +3,10 @@ package com.example.catdemo.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
+import com.example.catdemo.entity.group.addGroup;
+import com.example.catdemo.entity.group.updateGroup;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,6 +27,7 @@ public class Feature implements Serializable {
     private String featureId;
 
     @ApiModelProperty("功能标题中文")
+    @NotNull(groups = {addGroup.class} ,message = "功能标题中文不能为空")
     private String featureTitleZh;
 
     @ApiModelProperty("功能标题英文")
