@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.catdemo.mapper.BillinfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.catdemo.entity.Billinfo">
+        <result column="billId" property="billId" />
+        <result column="userId" property="userId" />
+        <result column="billType" property="billType" />
+        <result column="billSource" property="billSource" />
+        <result column="amount" property="amount" />
+        <result column="remark" property="remark" />
+        <result column="billTime" property="billTime" />
+    </resultMap>
+
+    <resultMap id="UserBillinfo" type="com.example.catdemo.entity.UserBill" extends="BaseResultMap">
+        <result column="username" property="userName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        billId, userId, billType, billSource, amount,remark,billTime
+    </sql>
+
+    <insert id="insertBillinfo" parameterType="com.example.catdemo.entity.Billinfo">
+        insert into billinfo
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="billId!= null">
+                    billId,
+                </if>
+                <if test="userId!= null">
+                    userId,
+                </if>
+                <if test="billType!= null">
+                    billType,
+                </if>
+                <if test="billSource!= null">
+                    billSource,
+                </if>
+                <if test="amount!= null">
+                    amount,
+                </if>
+                <if test="remark!= null">
+                    remark,
+                </if>
+                <if test="billTime!= null">
+                    billTime,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="billId!= null">
+                    #{billId},
+                </if>
+                <if test="userId!= null">
+                    #{userId},
+                </if>
+                <if test="billType!= null">
+                    #{billType},
+                </if>
+                <if test="billSource!= null">
+                    #{billSource},
+                </if>
+                <if test="amount!= null">
+                    #{amount},
+                </if>
+                <if test="remark!= null">
+                    #{remark},
+                </if>
+                <if test="billTime!= null">
+                    #{billTime},
+                </if>
+            </trim>
+    </insert>
+
+    <select id="selectBillinfoById" resultMap="BaseResultMap" parameterType="com.example.catdemo.entity.Billinfo">
+        select <include refid="Base_Column_List" />
+        from billinfo
+        where billId = #{billId}
+    </select>
+
+    <select id="selectAllBillinfo" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from billinfo
+    </select>
+
+    <delete id="deleteBillinfoById">
+            delete from billinfo
+        where billId = #{billId}
+    </delete>
+
+    <update id="updateBillinfoById">
+            update billinfo
+        set userId = #{userId}, billType = #{billType}, billSource = #{billSource}, amount = #{amount},remark = #{remark},billTime = #{billTime}
+        where billId = #{billId}
+    </update>
+
+    <select id="selectBillinfosByUserId" resultMap="UserBillinfo" parameterType="com.example.catdemo.entity.UserBill">
+        select family_member.name as username,
+        billinfo.billId as billId,
+        billinfo.userId as userId,
+        billinfo.billType as billType,
+        billinfo.billSource as billSource,
+        billinfo.amount as amount,
+        billinfo.remark as remark,
+        billinfo.billTime as billTime
+        from billinfo inner join family_member on billinfo.userId = family_member.member_id
+        <where>
+            <if test="userId != null &amp;&amp; userId != ''">
+                and billinfo.userId = #{userId}
+            </if>
+            <if test="userList != null &amp;&amp; userList.size() &gt; 0">
+                and billinfo.userId in
+                <foreach collection="userList" item="userId" open="(" separator="," close=")">
+                    #{userId}
+                </foreach>
+            </if>
+            <if test="billId != null &amp;&amp; billId != ''">
+                and billinfo.billId = #{billId}
+            </if>
+            <if test="billType != null &amp;&amp; billType != ''">
+                and billinfo.billType = #{billType}
+            </if>
+            <if test="billSource != null &amp;&amp; billSource != ''">
+                and billinfo.billSource = #{billSource}
+            </if>
+            <if test="startDate != null &amp;&amp; endDate != null">
+                and billinfo.billTime &gt;= #{startDate, javaType=java.util.Date, jdbcType=DATE}
+                and billinfo.billTime &lt;= #{endDate, javaType=java.util.Date, jdbcType=DATE}
+            </if>
+
+            order by billTime desc
+        </where>
+    </select>
+
+
+
+</mapper>

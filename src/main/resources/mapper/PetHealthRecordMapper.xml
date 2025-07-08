@@ -5,14 +5,20 @@
   <resultMap id="BaseResultMap" type="com.example.catdemo.entity.PetHealthRecord">
     <id column="id" jdbcType="VARCHAR" property="id"/>
     <result column="pet_id" jdbcType="VARCHAR" property="petId"/>
+    <result column="record_type" jdbcType="VARCHAR" property="recordType"/>
     <result column="record_date" jdbcType="DATE" property="recordDate"/>
-    <result column="record_type" jdbcType="CHAR" property="recordType"/>
-    <result column="veterinarian" jdbcType="VARCHAR" property="veterinarian"/>
-    <result column="next_visit" jdbcType="DATE" property="nextVisit"/>
-    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+    <result column="hospital" jdbcType="VARCHAR" property="hospital"/>
+    <result column="doctor" jdbcType="VARCHAR" property="doctor"/>
+    <result column="next_visit_date" jdbcType="DATE" property="nextVisitDate"/>
+    <result column="cost" jdbcType="DECIMAL" property="cost"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.catdemo.entity.PetHealthRecord">
-    <result column="description" jdbcType="LONGVARCHAR" property="description"/>
+    <result column="diagnosis" jdbcType="LONGVARCHAR" property="diagnosis"/>
+    <result column="treatment" jdbcType="LONGVARCHAR" property="treatment"/>
+    <result column="attachment_urls" jdbcType="LONGVARCHAR" property="attachmentUrls"/>
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark"/>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,10 +79,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, pet_id, record_date, record_type, veterinarian, next_visit, created_at
+    id, pet_id, record_type, record_date, hospital, doctor, next_visit_date, 
+	cost, create_time, update_time
   </sql>
   <sql id="Blob_Column_List">
-    description
+    diagnosis, treatment, attachment_urls, remark
   </sql>
 
   <select id="selectByExampleWithBLOBs" parameterType="com.example.catdemo.entity.PetHealthRecordExample" resultMap="ResultMapWithBLOBs">
@@ -134,10 +141,14 @@
 
   <insert id="insert" parameterType="com.example.catdemo.entity.PetHealthRecord">
 
-    insert into pet_health_record(id,pet_id, record_date, record_type,
-	 description, veterinarian, next_visit, created_at)
-    values ( #{id,jdbcType=VARCHAR}, #{petId,jdbcType=VARCHAR}, #{recordDate,jdbcType=DATE}, #{recordType,jdbcType=CHAR},
-	 #{description,jdbcType=LONGVARCHAR}, #{veterinarian,jdbcType=VARCHAR}, #{nextVisit,jdbcType=DATE}, #{createdAt,jdbcType=TIMESTAMP})
+    insert into pet_health_record(id,pet_id, record_type, record_date,
+	 hospital, doctor, diagnosis, treatment, 
+	 next_visit_date, cost, attachment_urls, remark, 
+	 create_time, update_time)
+    values (#{id,jdbcType=VARCHAR}, #{petId,jdbcType=VARCHAR}, #{recordType,jdbcType=VARCHAR}, #{recordDate,jdbcType=DATE},
+	 #{hospital,jdbcType=VARCHAR}, #{doctor,jdbcType=VARCHAR}, #{diagnosis,jdbcType=LONGVARCHAR}, #{treatment,jdbcType=LONGVARCHAR}, 
+	 #{nextVisitDate,jdbcType=DATE}, #{cost,jdbcType=DECIMAL}, #{attachmentUrls,jdbcType=LONGVARCHAR}, #{remark,jdbcType=LONGVARCHAR}, 
+	 #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
 
   <insert id="insertSelective" parameterType="com.example.catdemo.entity.PetHealthRecord">
@@ -145,28 +156,46 @@
     insert into pet_health_record
     <trim prefix="(" suffix=")" suffixOverrides=",">
         <if test="id != null">
-        id,
-      </if>
+          id,
+        </if>
       <if test="petId != null">
         pet_id,
-      </if>
-      <if test="recordDate != null">
-        record_date,
       </if>
       <if test="recordType != null">
         record_type,
       </if>
-      <if test="description != null">
-        description,
+      <if test="recordDate != null">
+        record_date,
       </if>
-      <if test="veterinarian != null">
-        veterinarian,
+      <if test="hospital != null">
+        hospital,
       </if>
-      <if test="nextVisit != null">
-        next_visit,
+      <if test="doctor != null">
+        doctor,
       </if>
-      <if test="createdAt != null">
-        created_at,
+      <if test="diagnosis != null">
+        diagnosis,
+      </if>
+      <if test="treatment != null">
+        treatment,
+      </if>
+      <if test="nextVisitDate != null">
+        next_visit_date,
+      </if>
+      <if test="cost != null">
+        cost,
+      </if>
+      <if test="attachmentUrls != null">
+        attachment_urls,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -176,23 +205,41 @@
       <if test="petId != null">
         #{petId,jdbcType=VARCHAR},
       </if>
+      <if test="recordType != null">
+        #{recordType,jdbcType=VARCHAR},
+      </if>
       <if test="recordDate != null">
         #{recordDate,jdbcType=DATE},
       </if>
-      <if test="recordType != null">
-        #{recordType,jdbcType=CHAR},
+      <if test="hospital != null">
+        #{hospital,jdbcType=VARCHAR},
       </if>
-      <if test="description != null">
-        #{description,jdbcType=LONGVARCHAR},
+      <if test="doctor != null">
+        #{doctor,jdbcType=VARCHAR},
       </if>
-      <if test="veterinarian != null">
-        #{veterinarian,jdbcType=VARCHAR},
+      <if test="diagnosis != null">
+        #{diagnosis,jdbcType=LONGVARCHAR},
       </if>
-      <if test="nextVisit != null">
-        #{nextVisit,jdbcType=DATE},
+      <if test="treatment != null">
+        #{treatment,jdbcType=LONGVARCHAR},
       </if>
-      <if test="createdAt != null">
-        #{createdAt,jdbcType=TIMESTAMP},
+      <if test="nextVisitDate != null">
+        #{nextVisitDate,jdbcType=DATE},
+      </if>
+      <if test="cost != null">
+        #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="attachmentUrls != null">
+        #{attachmentUrls,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -213,23 +260,41 @@
       <if test="record.petId != null">
        pet_id = #{record.petId,jdbcType=VARCHAR},
       </if>
+      <if test="record.recordType != null">
+       record_type = #{record.recordType,jdbcType=VARCHAR},
+      </if>
       <if test="record.recordDate != null">
        record_date = #{record.recordDate,jdbcType=DATE},
       </if>
-      <if test="record.recordType != null">
-       record_type = #{record.recordType,jdbcType=CHAR},
+      <if test="record.hospital != null">
+       hospital = #{record.hospital,jdbcType=VARCHAR},
       </if>
-      <if test="record.description != null">
-       description = #{record.description,jdbcType=LONGVARCHAR},
+      <if test="record.doctor != null">
+       doctor = #{record.doctor,jdbcType=VARCHAR},
       </if>
-      <if test="record.veterinarian != null">
-       veterinarian = #{record.veterinarian,jdbcType=VARCHAR},
+      <if test="record.diagnosis != null">
+       diagnosis = #{record.diagnosis,jdbcType=LONGVARCHAR},
       </if>
-      <if test="record.nextVisit != null">
-       next_visit = #{record.nextVisit,jdbcType=DATE},
+      <if test="record.treatment != null">
+       treatment = #{record.treatment,jdbcType=LONGVARCHAR},
       </if>
-      <if test="record.createdAt != null">
-       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="record.nextVisitDate != null">
+       next_visit_date = #{record.nextVisitDate,jdbcType=DATE},
+      </if>
+      <if test="record.cost != null">
+       cost = #{record.cost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.attachmentUrls != null">
+       attachment_urls = #{record.attachmentUrls,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.remark != null">
+       remark = #{record.remark,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.createTime != null">
+       create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -241,12 +306,18 @@
     update pet_health_record
     set id = #{record.id,jdbcType=VARCHAR},
 	  pet_id = #{record.petId,jdbcType=VARCHAR},
+	  record_type = #{record.recordType,jdbcType=VARCHAR},
 	  record_date = #{record.recordDate,jdbcType=DATE},
-	  record_type = #{record.recordType,jdbcType=CHAR},
-	  description = #{record.description,jdbcType=LONGVARCHAR},
-	  veterinarian = #{record.veterinarian,jdbcType=VARCHAR},
-	  next_visit = #{record.nextVisit,jdbcType=DATE},
-	  created_at = #{record.createdAt,jdbcType=TIMESTAMP}
+	  hospital = #{record.hospital,jdbcType=VARCHAR},
+	  doctor = #{record.doctor,jdbcType=VARCHAR},
+	  diagnosis = #{record.diagnosis,jdbcType=LONGVARCHAR},
+	  treatment = #{record.treatment,jdbcType=LONGVARCHAR},
+	  next_visit_date = #{record.nextVisitDate,jdbcType=DATE},
+	  cost = #{record.cost,jdbcType=DECIMAL},
+	  attachment_urls = #{record.attachmentUrls,jdbcType=LONGVARCHAR},
+	  remark = #{record.remark,jdbcType=LONGVARCHAR},
+	  create_time = #{record.createTime,jdbcType=TIMESTAMP},
+	  update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -256,11 +327,14 @@
     update pet_health_record
     set id = #{record.id,jdbcType=VARCHAR},
 	  pet_id = #{record.petId,jdbcType=VARCHAR},
+	  record_type = #{record.recordType,jdbcType=VARCHAR},
 	  record_date = #{record.recordDate,jdbcType=DATE},
-	  record_type = #{record.recordType,jdbcType=CHAR},
-	  veterinarian = #{record.veterinarian,jdbcType=VARCHAR},
-	  next_visit = #{record.nextVisit,jdbcType=DATE},
-	  created_at = #{record.createdAt,jdbcType=TIMESTAMP}
+	  hospital = #{record.hospital,jdbcType=VARCHAR},
+	  doctor = #{record.doctor,jdbcType=VARCHAR},
+	  next_visit_date = #{record.nextVisitDate,jdbcType=DATE},
+	  cost = #{record.cost,jdbcType=DECIMAL},
+	  create_time = #{record.createTime,jdbcType=TIMESTAMP},
+	  update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,23 +346,41 @@
       <if test="petId != null">
         pet_id = #{petId,jdbcType=VARCHAR},
       </if>
+      <if test="recordType != null">
+        record_type = #{recordType,jdbcType=VARCHAR},
+      </if>
       <if test="recordDate != null">
         record_date = #{recordDate,jdbcType=DATE},
       </if>
-      <if test="recordType != null">
-        record_type = #{recordType,jdbcType=CHAR},
+      <if test="hospital != null">
+        hospital = #{hospital,jdbcType=VARCHAR},
       </if>
-      <if test="description != null">
-        description = #{description,jdbcType=LONGVARCHAR},
+      <if test="doctor != null">
+        doctor = #{doctor,jdbcType=VARCHAR},
       </if>
-      <if test="veterinarian != null">
-        veterinarian = #{veterinarian,jdbcType=VARCHAR},
+      <if test="diagnosis != null">
+        diagnosis = #{diagnosis,jdbcType=LONGVARCHAR},
       </if>
-      <if test="nextVisit != null">
-        next_visit = #{nextVisit,jdbcType=DATE},
+      <if test="treatment != null">
+        treatment = #{treatment,jdbcType=LONGVARCHAR},
       </if>
-      <if test="createdAt != null">
-        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      <if test="nextVisitDate != null">
+        next_visit_date = #{nextVisitDate,jdbcType=DATE},
+      </if>
+      <if test="cost != null">
+        cost = #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="attachmentUrls != null">
+        attachment_urls = #{attachmentUrls,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -297,23 +389,32 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.catdemo.entity.PetHealthRecord">
     update pet_health_record
     set pet_id = #{petId,jdbcType=VARCHAR},
+	  record_type = #{recordType,jdbcType=VARCHAR},
 	  record_date = #{recordDate,jdbcType=DATE},
-	  record_type = #{recordType,jdbcType=CHAR},
-	  description = #{description,jdbcType=LONGVARCHAR},
-	  veterinarian = #{veterinarian,jdbcType=VARCHAR},
-	  next_visit = #{nextVisit,jdbcType=DATE},
-	  created_at = #{createdAt,jdbcType=TIMESTAMP}
+	  hospital = #{hospital,jdbcType=VARCHAR},
+	  doctor = #{doctor,jdbcType=VARCHAR},
+	  diagnosis = #{diagnosis,jdbcType=LONGVARCHAR},
+	  treatment = #{treatment,jdbcType=LONGVARCHAR},
+	  next_visit_date = #{nextVisitDate,jdbcType=DATE},
+	  cost = #{cost,jdbcType=DECIMAL},
+	  attachment_urls = #{attachmentUrls,jdbcType=LONGVARCHAR},
+	  remark = #{remark,jdbcType=LONGVARCHAR},
+	  create_time = #{createTime,jdbcType=TIMESTAMP},
+	  update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
   <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.PetHealthRecord">
     update pet_health_record
     set pet_id = #{petId,jdbcType=VARCHAR},
+	  record_type = #{recordType,jdbcType=VARCHAR},
 	  record_date = #{recordDate,jdbcType=DATE},
-	  record_type = #{recordType,jdbcType=CHAR},
-	  veterinarian = #{veterinarian,jdbcType=VARCHAR},
-	  next_visit = #{nextVisit,jdbcType=DATE},
-	  created_at = #{createdAt,jdbcType=TIMESTAMP}
+	  hospital = #{hospital,jdbcType=VARCHAR},
+	  doctor = #{doctor,jdbcType=VARCHAR},
+	  next_visit_date = #{nextVisitDate,jdbcType=DATE},
+	  cost = #{cost,jdbcType=DECIMAL},
+	  create_time = #{createTime,jdbcType=TIMESTAMP},
+	  update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

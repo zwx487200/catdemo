@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.catdemo.mapper.BirthdayMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.catdemo.entity.Birthday">
+    <id column="id" jdbcType="VARCHAR" property="id"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="date" jdbcType="DATE" property="date"/>
+    <result column="family_id" jdbcType="VARCHAR" property="familyId"/>
+    <result column="family_member_id" jdbcType="VARCHAR" property="familyMemberId"/>
+    <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+    <result column="remind_days" jdbcType="INTEGER" property="remindDays"/>
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.catdemo.entity.Birthday">
+    <result column="description" jdbcType="LONGVARCHAR" property="description"/>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, name, date, family_id, family_member_id, user_id, remind_days
+  </sql>
+  <sql id="Blob_Column_List">
+    description
+  </sql>
+
+  <select id="selectByExampleWithBLOBs" parameterType="com.example.catdemo.entity.BirthdayExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from birthday
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByExample" parameterType="com.example.catdemo.entity.BirthdayExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from birthday
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from birthday
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from birthday
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="com.example.catdemo.entity.BirthdayExample">
+    delete from birthday
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.example.catdemo.entity.Birthday">
+    insert into birthday(id,  name, date, description,
+	 family_id, family_member_id, user_id, remind_days)
+    values ( #{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR}, #{date,jdbcType=DATE}, #{description,jdbcType=LONGVARCHAR},
+	 #{familyId,jdbcType=VARCHAR}, #{familyMemberId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{remindDays,jdbcType=INTEGER})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.example.catdemo.entity.Birthday">
+
+    insert into birthday
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="familyId != null">
+        family_id,
+      </if>
+      <if test="familyMemberId != null">
+        family_member_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="remindDays != null">
+        remind_days,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=DATE},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="familyId != null">
+        #{familyId,jdbcType=VARCHAR},
+      </if>
+      <if test="familyMemberId != null">
+        #{familyMemberId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="remindDays != null">
+        #{remindDays,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="com.example.catdemo.entity.BirthdayExample" resultType="java.lang.Long">
+    select count(*) from birthday
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update birthday
+    <set>
+      <if test="record.id != null">
+       id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+       name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.date != null">
+       date = #{record.date,jdbcType=DATE},
+      </if>
+      <if test="record.description != null">
+       description = #{record.description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.familyId != null">
+       family_id = #{record.familyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familyMemberId != null">
+       family_member_id = #{record.familyMemberId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null">
+       user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remindDays != null">
+       remind_days = #{record.remindDays,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update birthday
+    set id = #{record.id,jdbcType=VARCHAR},
+	  name = #{record.name,jdbcType=VARCHAR},
+	  date = #{record.date,jdbcType=DATE},
+	  description = #{record.description,jdbcType=LONGVARCHAR},
+	  family_id = #{record.familyId,jdbcType=VARCHAR},
+	  family_member_id = #{record.familyMemberId,jdbcType=VARCHAR},
+	  user_id = #{record.userId,jdbcType=VARCHAR},
+	  remind_days = #{record.remindDays,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map">
+    update birthday
+    set id = #{record.id,jdbcType=VARCHAR},
+	  name = #{record.name,jdbcType=VARCHAR},
+	  date = #{record.date,jdbcType=DATE},
+	  family_id = #{record.familyId,jdbcType=VARCHAR},
+	  family_member_id = #{record.familyMemberId,jdbcType=VARCHAR},
+	  user_id = #{record.userId,jdbcType=VARCHAR},
+	  remind_days = #{record.remindDays,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.catdemo.entity.Birthday">
+    update birthday
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        date = #{date,jdbcType=DATE},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="familyId != null">
+        family_id = #{familyId,jdbcType=VARCHAR},
+      </if>
+      <if test="familyMemberId != null">
+        family_member_id = #{familyMemberId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="remindDays != null">
+        remind_days = #{remindDays,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.catdemo.entity.Birthday">
+    update birthday
+    set name = #{name,jdbcType=VARCHAR},
+	  date = #{date,jdbcType=DATE},
+	  description = #{description,jdbcType=LONGVARCHAR},
+	  family_id = #{familyId,jdbcType=VARCHAR},
+	  family_member_id = #{familyMemberId,jdbcType=VARCHAR},
+	  user_id = #{userId,jdbcType=VARCHAR},
+	  remind_days = #{remindDays,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.Birthday">
+    update birthday
+    set name = #{name,jdbcType=VARCHAR},
+	  date = #{date,jdbcType=DATE},
+	  family_id = #{familyId,jdbcType=VARCHAR},
+	  family_member_id = #{familyMemberId,jdbcType=VARCHAR},
+	  user_id = #{userId,jdbcType=VARCHAR},
+	  remind_days = #{remindDays,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -4,13 +4,21 @@
 
   <resultMap id="BaseResultMap" type="com.example.catdemo.entity.PetInfo">
     <id column="id" jdbcType="VARCHAR" property="id"/>
-    <result column="name" jdbcType="VARCHAR" property="name"/>
-    <result column="species" jdbcType="CHAR" property="species"/>
+    <result column="pet_name" jdbcType="VARCHAR" property="petName"/>
+    <result column="pet_type" jdbcType="VARCHAR" property="petType"/>
     <result column="breed" jdbcType="VARCHAR" property="breed"/>
+    <result column="gender" jdbcType="TINYINT" property="gender"/>
     <result column="birth_date" jdbcType="DATE" property="birthDate"/>
+    <result column="weight" jdbcType="DECIMAL" property="weight"/>
+    <result column="color" jdbcType="VARCHAR" property="color"/>
+    <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
+    <result column="is_sterilized" jdbcType="TINYINT" property="isSterilized"/>
     <result column="owner_id" jdbcType="VARCHAR" property="ownerId"/>
-    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
-    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.catdemo.entity.PetInfo">
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark"/>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,9 +79,29 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, species, breed, birth_date, owner_id, created_at, 
-	updated_at
+    id, pet_name, pet_type, breed, gender, birth_date, weight, 
+	color, avatar, is_sterilized, owner_id, create_time, update_time
   </sql>
+  <sql id="Blob_Column_List">
+    remark
+  </sql>
+
+  <select id="selectByExampleWithBLOBs" parameterType="com.example.catdemo.entity.PetInfoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pet_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
 
   <select id="selectByExample" parameterType="com.example.catdemo.entity.PetInfoExample" resultMap="BaseResultMap">
     select
@@ -90,9 +118,11 @@
     </if>
   </select>
 
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
     select
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from pet_info
     where id = #{id,jdbcType=VARCHAR}
   </select>
@@ -111,10 +141,14 @@
 
   <insert id="insert" parameterType="com.example.catdemo.entity.PetInfo">
 
-    insert into pet_info(id, name, species, breed,
-	 birth_date, owner_id, created_at, updated_at)
-    values ( #{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{species,jdbcType=CHAR}, #{breed,jdbcType=VARCHAR},
-	 #{birthDate,jdbcType=DATE}, #{ownerId,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
+    insert into pet_info(id,pet_name, pet_type, breed,
+	 gender, birth_date, weight, color, 
+	 avatar, is_sterilized, remark, owner_id, 
+	 create_time, update_time)
+    values (#{id,jdbcType=VARCHAR},  #{petName,jdbcType=VARCHAR}, #{petType,jdbcType=VARCHAR}, #{breed,jdbcType=VARCHAR},
+	 #{gender,jdbcType=TINYINT}, #{birthDate,jdbcType=DATE}, #{weight,jdbcType=DECIMAL}, #{color,jdbcType=VARCHAR}, 
+	 #{avatar,jdbcType=VARCHAR}, #{isSterilized,jdbcType=TINYINT}, #{remark,jdbcType=LONGVARCHAR}, #{ownerId,jdbcType=VARCHAR}, 
+	 #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
 
   <insert id="insertSelective" parameterType="com.example.catdemo.entity.PetInfo">
@@ -124,52 +158,88 @@
         <if test="id != null">
           id,
         </if>
-      <if test="name != null">
-        name,
+      <if test="petName != null">
+        pet_name,
       </if>
-      <if test="species != null">
-        species,
+      <if test="petType != null">
+        pet_type,
       </if>
       <if test="breed != null">
         breed,
       </if>
+      <if test="gender != null">
+        gender,
+      </if>
       <if test="birthDate != null">
         birth_date,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="color != null">
+        color,
+      </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="isSterilized != null">
+        is_sterilized,
+      </if>
+      <if test="remark != null">
+        remark,
       </if>
       <if test="ownerId != null">
         owner_id,
       </if>
-      <if test="createdAt != null">
-        created_at,
+      <if test="createTime != null">
+        create_time,
       </if>
-      <if test="updatedAt != null">
-        updated_at,
+      <if test="updateTime != null">
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
         <if test="id != null">
-        #{id,jdbcType=VARCHAR},
+          #{id,jdbcType=VARCHAR},
+        </if>
+      <if test="petName != null">
+        #{petName,jdbcType=VARCHAR},
       </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="species != null">
-        #{species,jdbcType=CHAR},
+      <if test="petType != null">
+        #{petType,jdbcType=VARCHAR},
       </if>
       <if test="breed != null">
         #{breed,jdbcType=VARCHAR},
       </if>
+      <if test="gender != null">
+        #{gender,jdbcType=TINYINT},
+      </if>
       <if test="birthDate != null">
         #{birthDate,jdbcType=DATE},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="color != null">
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="isSterilized != null">
+        #{isSterilized,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=LONGVARCHAR},
       </if>
       <if test="ownerId != null">
         #{ownerId,jdbcType=VARCHAR},
       </if>
-      <if test="createdAt != null">
-        #{createdAt,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatedAt != null">
-        #{updatedAt,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -187,28 +257,67 @@
       <if test="record.id != null">
        id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.name != null">
-       name = #{record.name,jdbcType=VARCHAR},
+      <if test="record.petName != null">
+       pet_name = #{record.petName,jdbcType=VARCHAR},
       </if>
-      <if test="record.species != null">
-       species = #{record.species,jdbcType=CHAR},
+      <if test="record.petType != null">
+       pet_type = #{record.petType,jdbcType=VARCHAR},
       </if>
       <if test="record.breed != null">
        breed = #{record.breed,jdbcType=VARCHAR},
       </if>
+      <if test="record.gender != null">
+       gender = #{record.gender,jdbcType=TINYINT},
+      </if>
       <if test="record.birthDate != null">
        birth_date = #{record.birthDate,jdbcType=DATE},
+      </if>
+      <if test="record.weight != null">
+       weight = #{record.weight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.color != null">
+       color = #{record.color,jdbcType=VARCHAR},
+      </if>
+      <if test="record.avatar != null">
+       avatar = #{record.avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isSterilized != null">
+       is_sterilized = #{record.isSterilized,jdbcType=TINYINT},
+      </if>
+      <if test="record.remark != null">
+       remark = #{record.remark,jdbcType=LONGVARCHAR},
       </if>
       <if test="record.ownerId != null">
        owner_id = #{record.ownerId,jdbcType=VARCHAR},
       </if>
-      <if test="record.createdAt != null">
-       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null">
+       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updatedAt != null">
-       updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      <if test="record.updateTime != null">
+       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update pet_info
+    set id = #{record.id,jdbcType=VARCHAR},
+	  pet_name = #{record.petName,jdbcType=VARCHAR},
+	  pet_type = #{record.petType,jdbcType=VARCHAR},
+	  breed = #{record.breed,jdbcType=VARCHAR},
+	  gender = #{record.gender,jdbcType=TINYINT},
+	  birth_date = #{record.birthDate,jdbcType=DATE},
+	  weight = #{record.weight,jdbcType=DECIMAL},
+	  color = #{record.color,jdbcType=VARCHAR},
+	  avatar = #{record.avatar,jdbcType=VARCHAR},
+	  is_sterilized = #{record.isSterilized,jdbcType=TINYINT},
+	  remark = #{record.remark,jdbcType=LONGVARCHAR},
+	  owner_id = #{record.ownerId,jdbcType=VARCHAR},
+	  create_time = #{record.createTime,jdbcType=TIMESTAMP},
+	  update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -217,13 +326,18 @@
   <update id="updateByExample" parameterType="map">
     update pet_info
     set id = #{record.id,jdbcType=VARCHAR},
-	  name = #{record.name,jdbcType=VARCHAR},
-	  species = #{record.species,jdbcType=CHAR},
+	  pet_name = #{record.petName,jdbcType=VARCHAR},
+	  pet_type = #{record.petType,jdbcType=VARCHAR},
 	  breed = #{record.breed,jdbcType=VARCHAR},
+	  gender = #{record.gender,jdbcType=TINYINT},
 	  birth_date = #{record.birthDate,jdbcType=DATE},
+	  weight = #{record.weight,jdbcType=DECIMAL},
+	  color = #{record.color,jdbcType=VARCHAR},
+	  avatar = #{record.avatar,jdbcType=VARCHAR},
+	  is_sterilized = #{record.isSterilized,jdbcType=TINYINT},
 	  owner_id = #{record.ownerId,jdbcType=VARCHAR},
-	  created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-	  updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
+	  create_time = #{record.createTime,jdbcType=TIMESTAMP},
+	  update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -232,40 +346,81 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.example.catdemo.entity.PetInfo">
     update pet_info
     <set>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
+      <if test="petName != null">
+        pet_name = #{petName,jdbcType=VARCHAR},
       </if>
-      <if test="species != null">
-        species = #{species,jdbcType=CHAR},
+      <if test="petType != null">
+        pet_type = #{petType,jdbcType=VARCHAR},
       </if>
       <if test="breed != null">
         breed = #{breed,jdbcType=VARCHAR},
       </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=TINYINT},
+      </if>
       <if test="birthDate != null">
         birth_date = #{birthDate,jdbcType=DATE},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="color != null">
+        color = #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null">
+        avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="isSterilized != null">
+        is_sterilized = #{isSterilized,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=LONGVARCHAR},
       </if>
       <if test="ownerId != null">
         owner_id = #{ownerId,jdbcType=VARCHAR},
       </if>
-      <if test="createdAt != null">
-        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatedAt != null">
-        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.catdemo.entity.PetInfo">
+    update pet_info
+    set pet_name = #{petName,jdbcType=VARCHAR},
+	  pet_type = #{petType,jdbcType=VARCHAR},
+	  breed = #{breed,jdbcType=VARCHAR},
+	  gender = #{gender,jdbcType=TINYINT},
+	  birth_date = #{birthDate,jdbcType=DATE},
+	  weight = #{weight,jdbcType=DECIMAL},
+	  color = #{color,jdbcType=VARCHAR},
+	  avatar = #{avatar,jdbcType=VARCHAR},
+	  is_sterilized = #{isSterilized,jdbcType=TINYINT},
+	  remark = #{remark,jdbcType=LONGVARCHAR},
+	  owner_id = #{ownerId,jdbcType=VARCHAR},
+	  create_time = #{createTime,jdbcType=TIMESTAMP},
+	  update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
   <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.PetInfo">
     update pet_info
-    set name = #{name,jdbcType=VARCHAR},
-	  species = #{species,jdbcType=CHAR},
+    set pet_name = #{petName,jdbcType=VARCHAR},
+	  pet_type = #{petType,jdbcType=VARCHAR},
 	  breed = #{breed,jdbcType=VARCHAR},
+	  gender = #{gender,jdbcType=TINYINT},
 	  birth_date = #{birthDate,jdbcType=DATE},
+	  weight = #{weight,jdbcType=DECIMAL},
+	  color = #{color,jdbcType=VARCHAR},
+	  avatar = #{avatar,jdbcType=VARCHAR},
+	  is_sterilized = #{isSterilized,jdbcType=TINYINT},
 	  owner_id = #{ownerId,jdbcType=VARCHAR},
-	  created_at = #{createdAt,jdbcType=TIMESTAMP},
-	  updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+	  create_time = #{createTime,jdbcType=TIMESTAMP},
+	  update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

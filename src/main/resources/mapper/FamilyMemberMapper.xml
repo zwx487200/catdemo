@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.catdemo.mapper.FamilyMemberMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.catdemo.entity.FamilyMember">
+    <id column="member_id" jdbcType="VARCHAR" property="memberId"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="gender" jdbcType="CHAR" property="gender"/>
+    <result column="birth_date" jdbcType="DATE" property="birthDate"/>
+    <result column="age" jdbcType="INTEGER" property="age"/>
+    <result column="phone" jdbcType="VARCHAR" property="phone"/>
+    <result column="education" jdbcType="VARCHAR" property="education"/>
+    <result column="email" jdbcType="VARCHAR" property="email"/>
+    <result column="relationship" jdbcType="VARCHAR" property="relationship"/>
+    <result column="role" jdbcType="VARCHAR" property="role"/>
+    <result column="family_groups_id" jdbcType="VARCHAR" property="familyGroupsId"/>
+    <result column="userId" jdbcType="VARCHAR" property="userId"/>
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.catdemo.entity.FamilyMember">
+    <result column="notes" jdbcType="LONGVARCHAR" property="notes"/>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    member_id, name, gender, birth_date, age, phone, education, 
+	email, relationship, role, family_groups_id,userId
+  </sql>
+  <sql id="Blob_Column_List">
+    notes
+  </sql>
+
+  <select id="selectByExampleWithBLOBs" parameterType="com.example.catdemo.entity.FamilyMemberExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from family_member
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByExample" parameterType="com.example.catdemo.entity.FamilyMemberExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from family_member
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from family_member
+    where member_id = #{memberId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from family_member
+    where member_id = #{memberId,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="com.example.catdemo.entity.FamilyMemberExample">
+    delete from family_member
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.example.catdemo.entity.FamilyMember">
+    insert into family_member(member_id, name, gender, birth_date,
+	 age, phone, education, email, 
+	 relationship, role, family_groups_id, userId, notes)
+    values (    #{memberId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR}, #{birthDate,jdbcType=DATE},
+	 #{age,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+	 #{relationship,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, #{familyGroupsId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{notes,jdbcType=LONGVARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.example.catdemo.entity.FamilyMember">
+    insert into family_member
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="memberId != null">
+        member_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="birthDate != null">
+        birth_date,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="education != null">
+        education,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="relationship != null">
+        relationship,
+      </if>
+      <if test="role != null">
+        role,
+      </if>
+      <if test="userId != null">
+        userId,
+      </if>
+      <if test="familyGroupsId != null">
+        family_groups_id,
+      </if>
+      <if test="notes != null">
+        notes,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="memberId != null">
+        #{memberId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=CHAR},
+      </if>
+      <if test="birthDate != null">
+        #{birthDate,jdbcType=DATE},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null">
+        #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="relationship != null">
+        #{relationship,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="familyGroupsId != null">
+        #{familyGroupsId,jdbcType=VARCHAR},
+      </if>
+      <if test="notes != null">
+        #{notes,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="com.example.catdemo.entity.FamilyMemberExample" resultType="java.lang.Long">
+    select count(*) from family_member
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update family_member
+    <set>
+      <if test="record.memberId != null">
+       member_id = #{record.memberId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+       name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gender != null">
+       gender = #{record.gender,jdbcType=CHAR},
+      </if>
+      <if test="record.birthDate != null">
+       birth_date = #{record.birthDate,jdbcType=DATE},
+      </if>
+      <if test="record.age != null">
+       age = #{record.age,jdbcType=INTEGER},
+      </if>
+      <if test="record.phone != null">
+       phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.education != null">
+       education = #{record.education,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+       email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.relationship != null">
+       relationship = #{record.relationship,jdbcType=VARCHAR},
+      </if>
+        <if test="record.role != null">
+       role = #{record.role,jdbcType=VARCHAR},
+        </if>
+      <if test="record.familyGroupsId != null">
+       family_groups_id = #{record.familyGroupsId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.notes != null">
+       notes = #{record.notes,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update family_member
+    set member_id = #{record.memberId,jdbcType=VARCHAR},
+	  name = #{record.name,jdbcType=VARCHAR},
+	  gender = #{record.gender,jdbcType=CHAR},
+	  birth_date = #{record.birthDate,jdbcType=DATE},
+	  age = #{record.age,jdbcType=INTEGER},
+	  phone = #{record.phone,jdbcType=VARCHAR},
+	  education = #{record.education,jdbcType=VARCHAR},
+	  email = #{record.email,jdbcType=VARCHAR},
+	  relationship = #{record.relationship,jdbcType=VARCHAR},
+	  role = #{record.role,jdbcType=VARCHAR},
+	  family_groups_id = #{record.familyGroupsId,jdbcType=VARCHAR},
+	  notes = #{record.notes,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map">
+    update family_member
+    set member_id = #{record.memberId,jdbcType=VARCHAR},
+	  name = #{record.name,jdbcType=VARCHAR},
+	  gender = #{record.gender,jdbcType=CHAR},
+	  birth_date = #{record.birthDate,jdbcType=DATE},
+	  age = #{record.age,jdbcType=INTEGER},
+	  phone = #{record.phone,jdbcType=VARCHAR},
+	  education = #{record.education,jdbcType=VARCHAR},
+	  email = #{record.email,jdbcType=VARCHAR},
+	  relationship = #{record.relationship,jdbcType=VARCHAR},
+	  role = #{record.role,jdbcType=VARCHAR},
+	  family_groups_id = #{record.familyGroupsId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.catdemo.entity.FamilyMember">
+    update family_member
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=CHAR},
+      </if>
+      <if test="birthDate != null">
+        birth_date = #{birthDate,jdbcType=DATE},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null">
+        education = #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="relationship != null">
+        relationship = #{relationship,jdbcType=VARCHAR},
+      </if>
+        <if test="role != null">
+        role = #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="familyGroupsId != null">
+        family_groups_id = #{familyGroupsId,jdbcType=VARCHAR},
+      </if>
+      <if test="notes != null">
+        notes = #{notes,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where member_id = #{memberId,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.catdemo.entity.FamilyMember">
+    update family_member
+    set name = #{name,jdbcType=VARCHAR},
+	  gender = #{gender,jdbcType=CHAR},
+	  birth_date = #{birthDate,jdbcType=DATE},
+	  age = #{age,jdbcType=INTEGER},
+	  phone = #{phone,jdbcType=VARCHAR},
+	  education = #{education,jdbcType=VARCHAR},
+	  email = #{email,jdbcType=VARCHAR},
+	  relationship = #{relationship,jdbcType=VARCHAR},
+	  role = #{role,jdbcType=VARCHAR},
+	  family_groups_id = #{familyGroupsId,jdbcType=VARCHAR},
+	  notes = #{notes,jdbcType=LONGVARCHAR}
+    where member_id = #{memberId,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.FamilyMember">
+    update family_member
+    set name = #{name,jdbcType=VARCHAR},
+	  gender = #{gender,jdbcType=CHAR},
+	  birth_date = #{birthDate,jdbcType=DATE},
+	  age = #{age,jdbcType=INTEGER},
+	  phone = #{phone,jdbcType=VARCHAR},
+	  education = #{education,jdbcType=VARCHAR},
+	  email = #{email,jdbcType=VARCHAR},
+	  relationship = #{relationship,jdbcType=VARCHAR},
+	  role = #{role,jdbcType=VARCHAR},
+	  family_groups_id = #{familyGroupsId,jdbcType=VARCHAR}
+    where member_id = #{memberId,jdbcType=VARCHAR}
+  </update>
+</mapper>

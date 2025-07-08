@@ -49,7 +49,7 @@ public class DayEventController {
 
     @RequestMapping("/getDayEventById")
     public Response getDayEventById(@Validated(queryGroup.class) @RequestBody DayEvent dayEvent) {
-        return dayEventService.getDayEventById(dayEvent.getUserId());
+        return dayEventService.getDayEventById(dayEvent.getId());
     }
 
 

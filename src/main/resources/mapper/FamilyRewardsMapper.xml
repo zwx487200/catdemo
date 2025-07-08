@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.catdemo.mapper.FamilyRewardsMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.catdemo.entity.FamilyRewards">
+    <id column="id" jdbcType="VARCHAR" property="id"/>
+    <result column="family_id" jdbcType="VARCHAR" property="familyId"/>
+    <result column="reward_name" jdbcType="VARCHAR" property="rewardName"/>
+    <result column="points_needed" jdbcType="INTEGER" property="pointsNeeded"/>
+    <result column="is_active" jdbcType="TINYINT" property="isActive"/>
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+    <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, family_id, reward_name, points_needed, is_active, created_at, create_by
+  </sql>
+
+  <select id="selectByExample" parameterType="com.example.catdemo.entity.FamilyRewardsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from family_rewards
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from family_rewards
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from family_rewards
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="com.example.catdemo.entity.FamilyRewardsExample">
+    delete from family_rewards
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.example.catdemo.entity.FamilyRewards">
+    insert into family_rewards(family_id, reward_name, points_needed, 
+	 is_active, created_at, create_by)
+    values (#{familyId,jdbcType=VARCHAR}, #{rewardName,jdbcType=VARCHAR}, #{pointsNeeded,jdbcType=INTEGER}, 
+	 #{isActive,jdbcType=TINYINT}, #{createdAt,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.example.catdemo.entity.FamilyRewards">
+    insert into family_rewards
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="familyId != null">
+        family_id,
+      </if>
+      <if test="rewardName != null">
+        reward_name,
+      </if>
+      <if test="pointsNeeded != null">
+        points_needed,
+      </if>
+      <if test="isActive != null">
+        is_active,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="familyId != null">
+        #{familyId,jdbcType=VARCHAR},
+      </if>
+      <if test="rewardName != null">
+        #{rewardName,jdbcType=VARCHAR},
+      </if>
+      <if test="pointsNeeded != null">
+        #{pointsNeeded,jdbcType=INTEGER},
+      </if>
+      <if test="isActive != null">
+        #{isActive,jdbcType=TINYINT},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="com.example.catdemo.entity.FamilyRewardsExample" resultType="java.lang.Long">
+    select count(*) from family_rewards
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update family_rewards
+    <set>
+      <if test="record.id != null">
+       id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familyId != null">
+       family_id = #{record.familyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rewardName != null">
+       reward_name = #{record.rewardName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pointsNeeded != null">
+       points_needed = #{record.pointsNeeded,jdbcType=INTEGER},
+      </if>
+      <if test="record.isActive != null">
+       is_active = #{record.isActive,jdbcType=TINYINT},
+      </if>
+      <if test="record.createdAt != null">
+       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+       create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map">
+    update family_rewards
+    set id = #{record.id,jdbcType=VARCHAR},
+	  family_id = #{record.familyId,jdbcType=VARCHAR},
+	  reward_name = #{record.rewardName,jdbcType=VARCHAR},
+	  points_needed = #{record.pointsNeeded,jdbcType=INTEGER},
+	  is_active = #{record.isActive,jdbcType=TINYINT},
+	  created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+	  create_by = #{record.createBy,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.catdemo.entity.FamilyRewards">
+    update family_rewards
+    <set>
+      <if test="familyId != null">
+        family_id = #{familyId,jdbcType=VARCHAR},
+      </if>
+      <if test="rewardName != null">
+        reward_name = #{rewardName,jdbcType=VARCHAR},
+      </if>
+      <if test="pointsNeeded != null">
+        points_needed = #{pointsNeeded,jdbcType=INTEGER},
+      </if>
+      <if test="isActive != null">
+        is_active = #{isActive,jdbcType=TINYINT},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.FamilyRewards">
+    update family_rewards
+    set family_id = #{familyId,jdbcType=VARCHAR},
+	  reward_name = #{rewardName,jdbcType=VARCHAR},
+	  points_needed = #{pointsNeeded,jdbcType=INTEGER},
+	  is_active = #{isActive,jdbcType=TINYINT},
+	  created_at = #{createdAt,jdbcType=TIMESTAMP},
+	  create_by = #{createBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

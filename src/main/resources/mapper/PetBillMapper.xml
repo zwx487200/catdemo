@@ -5,15 +5,19 @@
   <resultMap id="BaseResultMap" type="com.example.catdemo.entity.PetBill">
     <id column="id" jdbcType="VARCHAR" property="id"/>
     <result column="pet_id" jdbcType="VARCHAR" property="petId"/>
-    <result column="pet_bill_date" jdbcType="DATE" property="petBillDate"/>
-    <result column="pet_bill_type" jdbcType="VARCHAR" property="petBillType"/>
+    <result column="bill_type" jdbcType="VARCHAR" property="billType"/>
     <result column="amount" jdbcType="DECIMAL" property="amount"/>
+    <result column="bill_date" jdbcType="DATE" property="billDate"/>
+    <result column="payment_method" jdbcType="TINYINT" property="paymentMethod"/>
+    <result column="category" jdbcType="VARCHAR" property="category"/>
     <result column="family_id" jdbcType="VARCHAR" property="familyId"/>
     <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
-    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.catdemo.entity.PetBill">
     <result column="description" jdbcType="LONGVARCHAR" property="description"/>
+    <result column="attachment_urls" jdbcType="LONGVARCHAR" property="attachmentUrls"/>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,11 +78,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, pet_id, pet_bill_date, pet_bill_type, amount, family_id, created_by, 
-	created_at
+    id, pet_id, bill_type, amount, bill_date, payment_method, category, 
+	family_id, created_by, create_time, update_time
   </sql>
   <sql id="Blob_Column_List">
-    description
+    description, attachment_urls
   </sql>
 
   <select id="selectByExampleWithBLOBs" parameterType="com.example.catdemo.entity.PetBillExample" resultMap="ResultMapWithBLOBs">
@@ -135,12 +139,15 @@
   </delete>
 
   <insert id="insert" parameterType="com.example.catdemo.entity.PetBill">
-    insert into pet_bill(id,pet_id, pet_bill_date, pet_bill_type,
-	 amount, description, family_id, created_by, 
-	 created_at)
-    values ( #{id,jdbcType=VARCHAR}, #{petId,jdbcType=VARCHAR}, #{petBillDate,jdbcType=DATE}, #{petBillType,jdbcType=VARCHAR},
-	 #{amount,jdbcType=DECIMAL}, #{description,jdbcType=LONGVARCHAR}, #{familyId,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
-	 #{createdAt,jdbcType=TIMESTAMP})
+
+    insert into pet_bill(id,pet_id, bill_type, amount,
+	 bill_date, payment_method, category, description, 
+	 attachment_urls, family_id, created_by, create_time, 
+	 update_time)
+    values (#{id,jdbcType=VARCHAR}, #{petId,jdbcType=VARCHAR}, #{billType,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL},
+	 #{billDate,jdbcType=DATE}, #{paymentMethod,jdbcType=TINYINT}, #{category,jdbcType=VARCHAR}, #{description,jdbcType=LONGVARCHAR}, 
+	 #{attachmentUrls,jdbcType=LONGVARCHAR}, #{familyId,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+	 #{updateTime,jdbcType=TIMESTAMP})
   </insert>
 
   <insert id="insertSelective" parameterType="com.example.catdemo.entity.PetBill">
@@ -148,22 +155,31 @@
     insert into pet_bill
     <trim prefix="(" suffix=")" suffixOverrides=",">
         <if test="id != null">
-          id,
-        </if>
+        id,
+      </if>
       <if test="petId != null">
         pet_id,
       </if>
-      <if test="petBillDate != null">
-        pet_bill_date,
-      </if>
-      <if test="petBillType != null">
-        pet_bill_type,
+      <if test="billType != null">
+        bill_type,
       </if>
       <if test="amount != null">
         amount,
       </if>
+      <if test="billDate != null">
+        bill_date,
+      </if>
+      <if test="paymentMethod != null">
+        payment_method,
+      </if>
+      <if test="category != null">
+        category,
+      </if>
       <if test="description != null">
         description,
+      </if>
+      <if test="attachmentUrls != null">
+        attachment_urls,
       </if>
       <if test="familyId != null">
         family_id,
@@ -171,28 +187,40 @@
       <if test="createdBy != null">
         created_by,
       </if>
-      <if test="createdAt != null">
-        created_at,
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
         <if test="id != null">
-          #{id,jdbcType=VARCHAR},
-        </if>
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="petId != null">
         #{petId,jdbcType=VARCHAR},
       </if>
-      <if test="petBillDate != null">
-        #{petBillDate,jdbcType=DATE},
-      </if>
-      <if test="petBillType != null">
-        #{petBillType,jdbcType=VARCHAR},
+      <if test="billType != null">
+        #{billType,jdbcType=VARCHAR},
       </if>
       <if test="amount != null">
         #{amount,jdbcType=DECIMAL},
       </if>
+      <if test="billDate != null">
+        #{billDate,jdbcType=DATE},
+      </if>
+      <if test="paymentMethod != null">
+        #{paymentMethod,jdbcType=TINYINT},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=VARCHAR},
+      </if>
       <if test="description != null">
         #{description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="attachmentUrls != null">
+        #{attachmentUrls,jdbcType=LONGVARCHAR},
       </if>
       <if test="familyId != null">
         #{familyId,jdbcType=VARCHAR},
@@ -200,8 +228,11 @@
       <if test="createdBy != null">
         #{createdBy,jdbcType=VARCHAR},
       </if>
-      <if test="createdAt != null">
-        #{createdAt,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -222,17 +253,26 @@
       <if test="record.petId != null">
        pet_id = #{record.petId,jdbcType=VARCHAR},
       </if>
-      <if test="record.petBillDate != null">
-       pet_bill_date = #{record.petBillDate,jdbcType=DATE},
-      </if>
-      <if test="record.petBillType != null">
-       pet_bill_type = #{record.petBillType,jdbcType=VARCHAR},
+      <if test="record.billType != null">
+       bill_type = #{record.billType,jdbcType=VARCHAR},
       </if>
       <if test="record.amount != null">
        amount = #{record.amount,jdbcType=DECIMAL},
       </if>
+      <if test="record.billDate != null">
+       bill_date = #{record.billDate,jdbcType=DATE},
+      </if>
+      <if test="record.paymentMethod != null">
+       payment_method = #{record.paymentMethod,jdbcType=TINYINT},
+      </if>
+      <if test="record.category != null">
+       category = #{record.category,jdbcType=VARCHAR},
+      </if>
       <if test="record.description != null">
        description = #{record.description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.attachmentUrls != null">
+       attachment_urls = #{record.attachmentUrls,jdbcType=LONGVARCHAR},
       </if>
       <if test="record.familyId != null">
        family_id = #{record.familyId,jdbcType=VARCHAR},
@@ -240,8 +280,11 @@
       <if test="record.createdBy != null">
        created_by = #{record.createdBy,jdbcType=VARCHAR},
       </if>
-      <if test="record.createdAt != null">
-       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null">
+       create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -253,13 +296,17 @@
     update pet_bill
     set id = #{record.id,jdbcType=VARCHAR},
 	  pet_id = #{record.petId,jdbcType=VARCHAR},
-	  pet_bill_date = #{record.petBillDate,jdbcType=DATE},
-	  pet_bill_type = #{record.petBillType,jdbcType=VARCHAR},
+	  bill_type = #{record.billType,jdbcType=VARCHAR},
 	  amount = #{record.amount,jdbcType=DECIMAL},
+	  bill_date = #{record.billDate,jdbcType=DATE},
+	  payment_method = #{record.paymentMethod,jdbcType=TINYINT},
+	  category = #{record.category,jdbcType=VARCHAR},
 	  description = #{record.description,jdbcType=LONGVARCHAR},
+	  attachment_urls = #{record.attachmentUrls,jdbcType=LONGVARCHAR},
 	  family_id = #{record.familyId,jdbcType=VARCHAR},
 	  created_by = #{record.createdBy,jdbcType=VARCHAR},
-	  created_at = #{record.createdAt,jdbcType=TIMESTAMP}
+	  create_time = #{record.createTime,jdbcType=TIMESTAMP},
+	  update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -269,12 +316,15 @@
     update pet_bill
     set id = #{record.id,jdbcType=VARCHAR},
 	  pet_id = #{record.petId,jdbcType=VARCHAR},
-	  pet_bill_date = #{record.petBillDate,jdbcType=DATE},
-	  pet_bill_type = #{record.petBillType,jdbcType=VARCHAR},
+	  bill_type = #{record.billType,jdbcType=VARCHAR},
 	  amount = #{record.amount,jdbcType=DECIMAL},
+	  bill_date = #{record.billDate,jdbcType=DATE},
+	  payment_method = #{record.paymentMethod,jdbcType=TINYINT},
+	  category = #{record.category,jdbcType=VARCHAR},
 	  family_id = #{record.familyId,jdbcType=VARCHAR},
 	  created_by = #{record.createdBy,jdbcType=VARCHAR},
-	  created_at = #{record.createdAt,jdbcType=TIMESTAMP}
+	  create_time = #{record.createTime,jdbcType=TIMESTAMP},
+	  update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -286,17 +336,26 @@
       <if test="petId != null">
         pet_id = #{petId,jdbcType=VARCHAR},
       </if>
-      <if test="petBillDate != null">
-        pet_bill_date = #{petBillDate,jdbcType=DATE},
-      </if>
-      <if test="petBillType != null">
-        pet_bill_type = #{petBillType,jdbcType=VARCHAR},
+      <if test="billType != null">
+        bill_type = #{billType,jdbcType=VARCHAR},
       </if>
       <if test="amount != null">
         amount = #{amount,jdbcType=DECIMAL},
       </if>
+      <if test="billDate != null">
+        bill_date = #{billDate,jdbcType=DATE},
+      </if>
+      <if test="paymentMethod != null">
+        payment_method = #{paymentMethod,jdbcType=TINYINT},
+      </if>
+      <if test="category != null">
+        category = #{category,jdbcType=VARCHAR},
+      </if>
       <if test="description != null">
         description = #{description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="attachmentUrls != null">
+        attachment_urls = #{attachmentUrls,jdbcType=LONGVARCHAR},
       </if>
       <if test="familyId != null">
         family_id = #{familyId,jdbcType=VARCHAR},
@@ -304,8 +363,11 @@
       <if test="createdBy != null">
         created_by = #{createdBy,jdbcType=VARCHAR},
       </if>
-      <if test="createdAt != null">
-        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -314,25 +376,32 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.catdemo.entity.PetBill">
     update pet_bill
     set pet_id = #{petId,jdbcType=VARCHAR},
-	  pet_bill_date = #{petBillDate,jdbcType=DATE},
-	  pet_bill_type = #{petBillType,jdbcType=VARCHAR},
+	  bill_type = #{billType,jdbcType=VARCHAR},
 	  amount = #{amount,jdbcType=DECIMAL},
+	  bill_date = #{billDate,jdbcType=DATE},
+	  payment_method = #{paymentMethod,jdbcType=TINYINT},
+	  category = #{category,jdbcType=VARCHAR},
 	  description = #{description,jdbcType=LONGVARCHAR},
+	  attachment_urls = #{attachmentUrls,jdbcType=LONGVARCHAR},
 	  family_id = #{familyId,jdbcType=VARCHAR},
 	  created_by = #{createdBy,jdbcType=VARCHAR},
-	  created_at = #{createdAt,jdbcType=TIMESTAMP}
+	  create_time = #{createTime,jdbcType=TIMESTAMP},
+	  update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
   <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.PetBill">
     update pet_bill
     set pet_id = #{petId,jdbcType=VARCHAR},
-	  pet_bill_date = #{petBillDate,jdbcType=DATE},
-	  pet_bill_type = #{petBillType,jdbcType=VARCHAR},
+	  bill_type = #{billType,jdbcType=VARCHAR},
 	  amount = #{amount,jdbcType=DECIMAL},
+	  bill_date = #{billDate,jdbcType=DATE},
+	  payment_method = #{paymentMethod,jdbcType=TINYINT},
+	  category = #{category,jdbcType=VARCHAR},
 	  family_id = #{familyId,jdbcType=VARCHAR},
 	  created_by = #{createdBy,jdbcType=VARCHAR},
-	  created_at = #{createdAt,jdbcType=TIMESTAMP}
+	  create_time = #{createTime,jdbcType=TIMESTAMP},
+	  update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

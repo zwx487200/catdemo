@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.catdemo.mapper.AttributeMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.catdemo.entity.Attribute">
+    <id column="id" jdbcType="VARCHAR" property="id"/>
+    <result column="attribute_value" jdbcType="VARCHAR" property="attributeValue"/>
+    <result column="father_attribute_id" jdbcType="VARCHAR" property="fatherAttributeId"/>
+    <result column="attribute_type" jdbcType="VARCHAR" property="attributeType"/>
+    <result column="is_custom" jdbcType="TINYINT" property="isCustom"/>
+    <result column="family_id" jdbcType="VARCHAR" property="familyId"/>
+  </resultMap>
+  <sql id="Attribute_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{ criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{ criterion.value} and #{ criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{ listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, attribute_value, father_attribute_id, attribute_type, is_custom, family_id
+  </sql>
+
+  <select id="selectByExample" parameterType="com.example.catdemo.entity.AttributeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from attribute
+    <if test="_parameter != null">
+      <include refid="Attribute_Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from attribute
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from attribute
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="com.example.catdemo.entity.AttributeExample">
+    delete from attribute
+    <if test="_parameter != null">
+      <include refid="Attribute_Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.example.catdemo.entity.Attribute">
+
+    insert into attribute(id , attribute_value, father_attribute_id,
+	 attribute_type, is_custom, family_id)
+    values (#{id,jdbcType=VARCHAR},  #{attributeValue,jdbcType=VARCHAR}, #{fatherAttributeId,jdbcType=VARCHAR},
+	 #{attributeType,jdbcType=VARCHAR}, #{isCustom,jdbcType=TINYINT}, #{familyId,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.example.catdemo.entity.Attribute">
+    insert into attribute
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+          id,
+        </if>
+
+      <if test="attributeValue != null">
+        attribute_value,
+      </if>
+      <if test="fatherAttributeId != null">
+        father_attribute_id,
+      </if>
+      <if test="attributeType != null">
+        attribute_type,
+      </if>
+      <if test="isCustom != null">
+        is_custom,
+      </if>
+      <if test="familyId != null">
+        family_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+          #{id,jdbcType=VARCHAR},
+        </if>
+
+      <if test="attributeValue != null">
+        #{attributeValue,jdbcType=VARCHAR},
+      </if>
+      <if test="fatherAttributeId != null">
+        #{fatherAttributeId,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeType != null">
+        #{attributeType,jdbcType=VARCHAR},
+      </if>
+      <if test="isCustom != null">
+        #{isCustom,jdbcType=TINYINT},
+      </if>
+      <if test="familyId != null">
+        #{familyId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="com.example.catdemo.entity.AttributeExample" resultType="java.lang.Long">
+    select count(*) from attribute
+    <if test="_parameter != null">
+      <include refid="Attribute_Example_Where_Clause" />
+    </if>
+  </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update attribute
+    <set>
+      <if test="record.id != null">
+       id = #{record.id,jdbcType=VARCHAR},
+      </if>
+
+      <if test="record.attributeValue != null">
+       attribute_value = #{record.attributeValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fatherAttributeId != null">
+       father_attribute_id = #{record.fatherAttributeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attributeType != null">
+       attribute_type = #{record.attributeType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isCustom != null">
+       is_custom = #{record.isCustom,jdbcType=TINYINT},
+      </if>
+      <if test="record.familyId != null">
+       family_id = #{record.familyId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map">
+    update attribute
+    set id = #{record.id,jdbcType=VARCHAR},
+	  attribute_value = #{record.attributeValue,jdbcType=VARCHAR},
+	  father_attribute_id = #{record.fatherAttributeId,jdbcType=VARCHAR},
+	  attribute_type = #{record.attributeType,jdbcType=VARCHAR},
+	  is_custom = #{record.isCustom,jdbcType=TINYINT},
+	  family_id = #{record.familyId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.catdemo.entity.Attribute">
+    update attribute
+    <set>
+
+      <if test="attributeValue != null">
+        attribute_value = #{attributeValue,jdbcType=VARCHAR},
+      </if>
+      <if test="fatherAttributeId != null">
+        father_attribute_id = #{fatherAttributeId,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeType != null">
+        attribute_type = #{attributeType,jdbcType=VARCHAR},
+      </if>
+      <if test="isCustom != null">
+        is_custom = #{isCustom,jdbcType=TINYINT},
+      </if>
+      <if test="familyId != null">
+        family_id = #{familyId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.example.catdemo.entity.Attribute">
+    update attribute
+    set attribute_value = #{attributeValue,jdbcType=VARCHAR},
+	  father_attribute_id = #{fatherAttributeId,jdbcType=VARCHAR},
+	  attribute_type = #{attributeType,jdbcType=VARCHAR},
+	  is_custom = #{isCustom,jdbcType=TINYINT},
+	  family_id = #{familyId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
